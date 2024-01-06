@@ -5,13 +5,4 @@ using UnityEngine;
 public class Utils : MonoBehaviour
 {
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
 }

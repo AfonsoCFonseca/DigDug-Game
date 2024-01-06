@@ -25,7 +25,8 @@ Before officially starting to develop the game, I tried to create the map by div
 
 I applied the background map and the dug images to the dug chunks/tiles and made a few new additions to the array. For example, I created a tile for intersecting the horizontal and vertical tunnels.
 
-Afterward, I implemented the first player movement by enabling movement along the X and Y axes without restrictions. I also added sprite animation that flips or rotates the sprite depending on the direction of the player's movement.
+Afterward, I implemented the first player movement by enabling movement along the X and Y axes without restrictions. I also added sprite animation that flips or rotates the sprite depending on the direction of the player's movement. 
+When calculating the movement, I developed the system that reaches the next tile based on the direction you are heading and updates the player transform.position to that location
 
 
 

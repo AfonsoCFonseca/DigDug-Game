@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 387821844}
   - component: {fileID: 387821845}
   - component: {fileID: 387821846}
+  - component: {fileID: 387821847}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: GameManager
@@ -359,6 +360,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8555149a85d4790bc844f0be9f47f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &387821847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387821843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ba913a67a014b298069de1ca01d267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  STARTING_TILE_POSITION: {x: -5, y: 0.35}
+  STARTING_PLAYER_DIRECTION: 2
+  PLAYER_TO_TILE_DISTANCE: 0.1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,11 +564,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8463308267747360242, guid: d540200f2ef29489a997842ab42600b2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.5
+      value: -4.7
       objectReference: {fileID: 0}
     - target: {fileID: 8463308267747360242, guid: d540200f2ef29489a997842ab42600b2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.4
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8463308267747360242, guid: d540200f2ef29489a997842ab42600b2, type: 3}
       propertyPath: m_LocalPosition.z

@@ -14,12 +14,13 @@ public class LevelManager : MonoBehaviour
     public Tile tile;
     
     private Tile[,] mapArray;
-    LevelMaps levelMaps;
+    private LevelMaps levelMaps;
+    private GameValues gameValues;
 
     void Start()
     {
         levelMaps = GetComponent<LevelMaps>();
-
+        gameValues = GetComponent<GameValues>();
         populateMap();
     }
 
@@ -77,7 +78,7 @@ public class LevelManager : MonoBehaviour
                 Vector2 tilePosition = mapArray[i, j].transform.position;
                 float distance = Vector2.Distance(position, tilePosition);
 
-                if (distance < nearestDistance)
+                if (distance < nearestDistance && distance <= gameValues.PLAYER_TO_TILE_DISTANCE)
                 {
                     nearestDistance = distance;
                     currentTile = mapArray[i, j];

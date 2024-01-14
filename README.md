@@ -1,4 +1,4 @@
-# Bejeweled
+# Dig Dug
 Classic DigDug game developed in a Unity 2D project
 
 
@@ -28,6 +28,7 @@ I applied the background map and the dug images to the dug chunks/tiles and made
 Afterward, I implemented the first player movement by enabling movement along the X and Y axes without restrictions. I also added sprite animation that flips or rotates the sprite depending on the direction of the player's movement. 
 When calculating the movement, I developed the system that reaches the next tile based on the direction you are heading and updates the player transform.position to that location. The player must stick to this position until he reaches it, regardless the key pressed
 
+Next, I shifted the building proccess of the game and changed to the UI implementation system. Added the life system and UI, implemented the highscore and score system and added the rounds UI and functions (levels)
 
 
 # Future Implementation

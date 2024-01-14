@@ -30,6 +30,8 @@ When calculating the movement, I developed the system that reaches the next tile
 
 Next, I shifted the building proccess of the game and changed to the UI implementation system. Added the life system and UI, implemented the highscore and score system and added the rounds UI and functions (levels)
 
+After, I started implementing the dig logic, I've created a 2D box collider in my player Gameobject that detects trigger collision with any of the tile Slots, therefore, when it happens, turns on the rendering of the slots and turns off its collider. For being easier to detect the collision depending on the direction (up/down or right/left) I've started to keep tracking of the player orientation using booleans
+
 
 # Future Implementation
 

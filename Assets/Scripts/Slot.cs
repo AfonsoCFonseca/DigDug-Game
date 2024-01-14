@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    public GameObject gm;
     const float SLOT_WIDTH = 1;
     const float SLOT_HEIGHT = 5.05f;
-
-    void Start()
-    {
-        gm = GameObject.FindGameObjectsWithTag("GameManager")[0];
-    }
 
     public int getCurrentTileX() 
     {
@@ -23,9 +17,11 @@ public class Slot : MonoBehaviour
         return Mathf.Abs((int) ((transform.position.y - LevelManager.INITIAL_MAP_Y) / SLOT_HEIGHT));
     }
 
-    public int getCurrentSlotIndex() 
+    public void setToDigged()
     {
-        
-        return 2;
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = true;
+        BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
+        boxCollider2D.enabled = false;
     }
 }

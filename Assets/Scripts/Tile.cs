@@ -85,7 +85,10 @@ public class Tile : MonoBehaviour
         Transform childTransform = this.transform.Find(ob_child_name + pos);
         if(childTransform) 
         {
-            childTransform.gameObject.SetActive(true);
+            SpriteRenderer spriteRenderer = childTransform.GetComponent<SpriteRenderer>();
+            spriteRenderer.enabled = true;
+            BoxCollider2D boxCollider2D = childTransform.GetComponent<BoxCollider2D>();
+            boxCollider2D.enabled = false;
         }
     }
 

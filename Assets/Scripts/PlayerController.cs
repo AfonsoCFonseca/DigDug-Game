@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private Tile currentTile;
     private Tile currentNeighbourTile;
 
+    private bool isMovingHorizontally = true;
+
     void Start()
     {
         playerSprite = transform.Find("Sprite");
@@ -63,6 +65,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isRunning", false);
         }
 
+
     }
 
     private void MovePlayer(Direction currentDirection)
@@ -96,26 +99,31 @@ public class PlayerController : MonoBehaviour
         switch(dir)
         {
             case Direction.East:
+                isMovingHorizontally = true;
                 spriteRenderer.flipX = false;
                 spriteRenderer.flipY = false;
                 playerSprite.rotation = Quaternion.Euler(0f, 0f, 0);
                 break;
             case Direction.West:
+                isMovingHorizontally = true;
                 spriteRenderer.flipX = true;
                 spriteRenderer.flipY = false;
                 playerSprite.rotation = Quaternion.Euler(0f, 0f, 0);
                 break;
             case Direction.North:
+                isMovingHorizontally = false;
                 playerSprite.rotation = Quaternion.Euler(0f, 0f, 90f);
                 spriteRenderer.flipY = false;
                 spriteRenderer.flipX = false;
                 break;
             case Direction.South:
+                isMovingHorizontally = false;
                 playerSprite.rotation = Quaternion.Euler(0f, 0f, -90f);
                 spriteRenderer.flipY = true;
                 spriteRenderer.flipX = false;
                 break;
             default:
+                isMovingHorizontally = true;
                 spriteRenderer.flipX = false;
                 spriteRenderer.flipY = false;
                 playerSprite.rotation = Quaternion.Euler(0f, 0f, 0);
@@ -132,6 +140,26 @@ public class PlayerController : MonoBehaviour
         transform.position = tilePos;
 
         currentNeighbourTile = levelManager.GetNeighbourTile(currentTile, 
-            gameValues.STARTING_PLAYER_DIRECTION);
+        gameValues.STARTING_PLAYER_DIRECTION);
+    }
+
+    private void OnTriggerEnter2D(Collider2D otherCollider)
+    {
+        if (isCollidingWithSlot(otherCollider))
+        {
+            Slot slot = otherCollider.GetComponent<Slot>();
+            slot.setToDigged();
+        }
+    }
+
+    private bool isCollidingWithSlot(Collider2D otherCollider)
+    {
+        return (isMovingHorizontally && otherCollider.CompareTag("SlotHorizontal") 
+        || !isMovingHorizontally && otherCollider.CompareTag("SlotVertical"));
+    }
+
+    private void digSlot()
+    {
+
     }
 }

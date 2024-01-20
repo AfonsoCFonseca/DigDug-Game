@@ -15,17 +15,27 @@ public class PlayerController : MonoBehaviour
     private Tile currentTile;
     private Tile currentNeighbourTile;
 
-    private bool isMovingHorizontally = true;
+    private Excavator excavatorCollider;
+    private Transform excavatorTransform;
+    public bool isMovingHorizontally = true;
 
     void Start()
     {
         playerSprite = transform.Find("Sprite");
+        excavatorTransform = transform.Find("Excavator");
+
         animator = playerSprite.GetComponent<Animator>();
         spriteRenderer = playerSprite.GetComponent<SpriteRenderer>();
         gameValues = levelManager.GetComponent<GameValues>();
+        excavatorCollider = GetComponentInChildren<Excavator>();
+        
         setPlayerToStartingPosition();
-    }
 
+        if (excavatorCollider != null)
+        {
+            excavatorCollider.OnCollisionEvent += HandleDigCollision;
+        }
+    }
     
     void Update()
     {
@@ -100,33 +110,26 @@ public class PlayerController : MonoBehaviour
         {
             case Direction.East:
                 isMovingHorizontally = true;
-                spriteRenderer.flipX = false;
-                spriteRenderer.flipY = false;
-                playerSprite.rotation = Quaternion.Euler(0f, 0f, 0);
+                playerSprite.rotation = Quaternion.Euler(0f, 0f, 0f);
                 break;
             case Direction.West:
                 isMovingHorizontally = true;
-                spriteRenderer.flipX = true;
-                spriteRenderer.flipY = false;
-                playerSprite.rotation = Quaternion.Euler(0f, 0f, 0);
+                playerSprite.rotation = Quaternion.Euler(0f, 180f, 0f);
                 break;
             case Direction.North:
                 isMovingHorizontally = false;
+                excavatorTransform.rotation = Quaternion.Euler(0f, 0f, 90f);
                 playerSprite.rotation = Quaternion.Euler(0f, 0f, 90f);
-                spriteRenderer.flipY = false;
-                spriteRenderer.flipX = false;
                 break;
             case Direction.South:
                 isMovingHorizontally = false;
-                playerSprite.rotation = Quaternion.Euler(0f, 0f, -90f);
-                spriteRenderer.flipY = true;
-                spriteRenderer.flipX = false;
+                playerSprite.rotation = Quaternion.Euler(0f, 180f, -90f);
+                excavatorTransform.rotation = Quaternion.Euler(0f, 0f, -90f);
                 break;
             default:
                 isMovingHorizontally = true;
-                spriteRenderer.flipX = false;
-                spriteRenderer.flipY = false;
-                playerSprite.rotation = Quaternion.Euler(0f, 0f, 0);
+                playerSprite.rotation = Quaternion.Euler(0f, 0f, 0f);
+                excavatorTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 break;
         }
     }
@@ -143,23 +146,13 @@ public class PlayerController : MonoBehaviour
         gameValues.STARTING_PLAYER_DIRECTION);
     }
 
-    private void OnTriggerEnter2D(Collider2D otherCollider)
+    private void HandleDigCollision(Collider2D otherCollider)
     {
-        if (isCollidingWithSlot(otherCollider))
+        if(otherCollider.CompareTag("SlotVertical"))
         {
-            Slot slot = otherCollider.GetComponent<Slot>();
-            slot.setToDigged();
+            Debug.Log("here");
         }
-    }
-
-    private bool isCollidingWithSlot(Collider2D otherCollider)
-    {
-        return (isMovingHorizontally && otherCollider.CompareTag("SlotHorizontal") 
-        || !isMovingHorizontally && otherCollider.CompareTag("SlotVertical"));
-    }
-
-    private void digSlot()
-    {
-
+        Slot slot = otherCollider.GetComponent<Slot>();
+        slot.setToDigged();
     }
 }

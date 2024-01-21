@@ -1,7 +1,9 @@
 # Dig Dug
 Classic DigDug game developed in a Unity 2D project
 
-
+<p align="center">
+  <img src='https://github.com/AfonsoCFonseca/DigDug-Game/tree/main/progress_photos/header.png'>
+</p>
 
 ---------------------------------------------------------------
 # Structure
@@ -30,7 +32,7 @@ When calculating the movement, I developed the system that reaches the next tile
 
 Next, I shifted the building proccess of the game and changed to the UI implementation system. Added the life system and UI, implemented the highscore and score system and added the rounds UI and functions (levels)
 
-After, I started implementing the dig logic, I've created a 2D box collider in my player Gameobject that detects trigger collision with any of the tile Slots, therefore, when it happens, turns on the rendering of the slots and turns off its collider. For being easier to detect the collision depending on the direction (up/down or right/left) I've started to keep tracking of the player orientation using booleans
+After starting to implement the digging logic, I created a 2D box collider in my player GameObject that detects trigger collisions with any of the tile Slots. When a collision occurs, it activates the rendering of the slots and deactivates their colliders. To simplify collision detection based on direction (up/down or right/left), I began tracking the player's orientation using booleans. Once the movement and excavation were established, I applied general limitations to player movement, such as restricting movement beyond the board's limits and allowing backward movement. In this game, backward movement is the only direction allowed, even if the next neighbor Tile position is already set.
 
 
 # Future Implementation
@@ -39,4 +41,6 @@ After, I started implementing the dig logic, I've created a 2D box collider in m
 ---------------------------------------------------------------
 # Sketches & Evolution
 
-
+ <p float="left">
+   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/tree/main/progress_photos/_1_.png'>
+ </p>

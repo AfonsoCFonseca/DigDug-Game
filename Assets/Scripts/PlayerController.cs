@@ -9,8 +9,10 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     [SerializeField] LevelManager levelManager;
     private GameValues gameValues;
+    private Utils utils;
 
     [SerializeField] private float speed = 6.0f;
+    Direction currentDirection;
 
     private Tile currentTile;
     private Tile currentNeighbourTile;
@@ -27,9 +29,10 @@ public class PlayerController : MonoBehaviour
         animator = playerSprite.GetComponent<Animator>();
         spriteRenderer = playerSprite.GetComponent<SpriteRenderer>();
         gameValues = levelManager.GetComponent<GameValues>();
+        utils = levelManager.GetComponent<Utils>();
         excavatorCollider = GetComponentInChildren<Excavator>();
         
-        setPlayerToStartingPosition();
+        SetPlayerToStartingPosition();
 
         if (excavatorCollider != null)
         {
@@ -78,9 +81,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void MovePlayer(Direction currentDirection)
+    private void MovePlayer(Direction requestedDirection)
     {
-        currentNeighbourTile = calculateNextTileNeighbour(currentDirection);
+        currentNeighbourTile = CalculateNextTileNeighbour(requestedDirection);
         currentNeighbourTile.setDebugToColor("target");
         //sets the player movement
         Vector2 targetPosition = currentNeighbourTile.transform.position;
@@ -89,22 +92,26 @@ public class PlayerController : MonoBehaviour
         transform.position = newPosition;
     }
 
-    private Tile calculateNextTileNeighbour(Direction currentDirection)
+    private Tile CalculateNextTileNeighbour(Direction requestedDirection)
     {
         // get the next tile
-        Tile neighbourTile = levelManager.GetNeighbourTile(currentTile, currentDirection);
-        //Check if neighbour Tile should be updated
-        float distanceToTarget = Vector2.Distance(transform.position, currentNeighbourTile.transform.position);
-        if(currentNeighbourTile.getId() !=  neighbourTile.getId() && distanceToTarget <= gameValues.PLAYER_TO_TILE_DISTANCE)
+        Tile neighbourTile = levelManager.GetNeighbourTile(currentTile, requestedDirection);
+        //First input of the game
+        if(currentNeighbourTile == null){
+            SetPlayerStartingRotationAndDirection(requestedDirection, neighbourTile);
+        }
+
+        if(isPossibleNewNeighbourTile(requestedDirection, neighbourTile))
         {
-            updatesPlayerRotation(currentDirection);
+            currentDirection = requestedDirection;
+            UpdatesPlayerRotation(currentDirection);
             return neighbourTile;
         }
         //if not, returns the current neighbour Tile
         return currentNeighbourTile;
     }
 
-    private void updatesPlayerRotation(Direction dir)
+    private void UpdatesPlayerRotation(Direction dir)
     {
         switch(dir)
         {
@@ -118,40 +125,44 @@ public class PlayerController : MonoBehaviour
                 break;
             case Direction.North:
                 isMovingHorizontally = false;
-                excavatorTransform.rotation = Quaternion.Euler(0f, 0f, 90f);
                 playerSprite.rotation = Quaternion.Euler(0f, 0f, 90f);
                 break;
             case Direction.South:
                 isMovingHorizontally = false;
                 playerSprite.rotation = Quaternion.Euler(0f, 180f, -90f);
-                excavatorTransform.rotation = Quaternion.Euler(0f, 0f, -90f);
                 break;
             default:
                 isMovingHorizontally = true;
                 playerSprite.rotation = Quaternion.Euler(0f, 0f, 0f);
-                excavatorTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 break;
         }
     }
 
-    private void setPlayerToStartingPosition()
+    private void SetPlayerToStartingPosition()
     {
         currentTile = levelManager.GetCurrentTile(gameValues.STARTING_TILE_POSITION);
         Vector2 tilePos = currentTile.transform.position;
         tilePos.x += 2.5f; //half images height
         tilePos.x -= 2.44f; //half images width
         transform.position = tilePos;
+    }
 
-        currentNeighbourTile = levelManager.GetNeighbourTile(currentTile, 
-        gameValues.STARTING_PLAYER_DIRECTION);
+    private void SetPlayerStartingRotationAndDirection(Direction requestedDirection, Tile neighbourTile)
+    {
+        currentDirection = requestedDirection;
+        currentNeighbourTile = neighbourTile;
+        UpdatesPlayerRotation(currentDirection);  
+    }
+
+    private bool isPossibleNewNeighbourTile(Direction requestedDirection, Tile neighbourTile)
+    {
+        float distanceToTarget = Vector2.Distance(transform.position, currentNeighbourTile.transform.position);
+        return (requestedDirection == utils.GetOppositeDirection(currentDirection) || 
+            currentNeighbourTile.getId() !=  neighbourTile.getId() && distanceToTarget <= gameValues.PLAYER_TO_TILE_DISTANCE);
     }
 
     private void HandleDigCollision(Collider2D otherCollider)
     {
-        if(otherCollider.CompareTag("SlotVertical"))
-        {
-            Debug.Log("here");
-        }
         Slot slot = otherCollider.GetComponent<Slot>();
         slot.setToDigged();
     }

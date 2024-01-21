@@ -93,6 +93,10 @@ public class LevelManager : MonoBehaviour
         int mapX = currentTile.getMapTilePosition().mapX;
         int mapY = currentTile.getMapTilePosition().mapY;
 
+        if (!isBoardLimit(mapX, mapY, direction)){
+            return mapArray[mapY, mapX];
+        }
+
         switch (direction)
         {
             case Direction.West:
@@ -122,5 +126,22 @@ public class LevelManager : MonoBehaviour
         }
 
         return currentTile;
+    }
+
+    private bool isBoardLimit(int mapX, int mapY, Direction direction)
+    {
+        if(direction == Direction.West && mapX > 0 ||
+            direction == Direction.East && mapX + 1 < mapArray.GetLength(1) )
+            {
+                return true;
+            }
+        
+         if(direction == Direction.North && mapY > 0 || 
+            direction == Direction.South && mapY + 1 < mapArray.GetLength(0))
+            {
+                return true;
+            }
+
+        return false;
     }
 }

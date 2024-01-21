@@ -2,7 +2,7 @@
 Classic DigDug game developed in a Unity 2D project
 
 <p align="center">
-  <img src='https://github.com/AfonsoCFonseca/DigDug-Game/tree/main/progress_photos/header.png'>
+  <img src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/header.png'>
 </p>
 
 ---------------------------------------------------------------
@@ -42,5 +42,5 @@ After starting to implement the digging logic, I created a 2D box collider in my
 # Sketches & Evolution
 
  <p float="left">
-   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/tree/main/progress_photos/_1_.png'>
+   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_1.png'>
  </p>

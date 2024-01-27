@@ -26,6 +26,7 @@ public class LevelManager : MonoBehaviour
 
     void populateMap() {
         tileSpawn();
+        enemySpawn();
     }
 
     void tileSpawn() 
@@ -45,6 +46,14 @@ public class LevelManager : MonoBehaviour
 
                 mapArray[i, j].GetComponent<Tile>().Setup(result.vertical, result.horizontal, i, j);
             }
+        }
+    }
+
+    void enemySpawn()
+    {
+        for(int i = 0; i < levelMaps.enemyPosition.Length; i++)
+        {
+            Debug.Log(levelMaps.enemyPosition[i]);
         }
     }
 

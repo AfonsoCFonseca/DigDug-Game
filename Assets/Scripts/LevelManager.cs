@@ -12,6 +12,9 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField]
     public Tile tile;
+
+    [SerializeField]
+    private Enemy enemy;
     
     private Tile[,] mapArray;
     private LevelMaps levelMaps;
@@ -53,7 +56,10 @@ public class LevelManager : MonoBehaviour
     {
         for(int i = 0; i < levelMaps.enemyPosition.Length; i++)
         {
-            Debug.Log(levelMaps.enemyPosition[i]);
+            Position pos = levelMaps.enemyPosition[i];
+            Tile enemyTile = GetCurrentTileByArrayPosition(pos.x, pos.y);
+            Vector2 currentPosition = new Vector2(enemyTile.transform.position.x, enemyTile.transform.position.y);
+            Instantiate(enemy, currentPosition, Quaternion.identity);
         }
     }
 
@@ -75,6 +81,11 @@ public class LevelManager : MonoBehaviour
         return (horizontal, vertical);
     }
 
+    private Tile GetCurrentTileByArrayPosition(int posX, int posY)
+    {
+        return mapArray[posY, posX];
+    }
+
     public Tile GetCurrentTile(Vector2 position)
     {
         Tile currentTile = null;
@@ -87,7 +98,7 @@ public class LevelManager : MonoBehaviour
                 Vector2 tilePosition = mapArray[i, j].transform.position;
                 float distance = Vector2.Distance(position, tilePosition);
 
-                if (distance < nearestDistance && distance <= gameValues.PLAYER_TO_TILE_DISTANCE)
+                if (distance < nearestDistance)
                 {
                     nearestDistance = distance;
                     currentTile = mapArray[i, j];

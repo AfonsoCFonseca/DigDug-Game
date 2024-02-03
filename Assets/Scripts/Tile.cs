@@ -17,6 +17,8 @@ public class Tile : MonoBehaviour
     private Renderer debugFlagRenderer;
     private const string DEBUG_OBJ_NAME = "debug_flag";
     public Color targetColor = Color.green;
+    public Color debugColor = Color.blue;
+    public Color debugColor1 = Color.yellow;
     public Color defaultColor = Color.red;
 
 
@@ -57,6 +59,8 @@ public class Tile : MonoBehaviour
     {
         if(type == "default") debugFlagRenderer.material.color = defaultColor;
         if(type == "target") debugFlagRenderer.material.color = targetColor;
+        if(type == "debug") debugFlagRenderer.material.color = debugColor;
+        if(type == "debug1") debugFlagRenderer.material.color = debugColor1;
     }
 
     void updateTileTextures() 
@@ -105,5 +109,27 @@ public class Tile : MonoBehaviour
         }
 
         return idBuilder.ToString();
+    }
+    //if one of the slots is different than 0 it means it's empty
+    public bool isFilled()
+    {
+        bool isFilled = false;
+        for(int i = 0 ; i < horizontalSlots.Length; i++)
+        {
+            if(horizontalSlots[i] == 0) {
+                isFilled = true;
+            }
+        }
+
+        if(!isFilled) return isFilled;
+        
+        for(int j = 0 ; j < verticalSlots.Length; j++)
+        {
+            if(verticalSlots[j] == 0) {
+                isFilled = true;
+            }
+        }
+
+        return isFilled;
     }
 }

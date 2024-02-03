@@ -1,14 +1,15 @@
 using UnityEngine;
 
+public class Position
+{
+    public int x;
+    public int y;
+}
+
 public class LevelMaps : MonoBehaviour
 {
-    public class Position
-    {
-        public int x;
-        public int y;
-    }
 
-    public Position[] enemyPosition = new Position[3];
+    public Position[] enemyPosition = new Position[1];
     public int[][] map;
 
     void Start()
@@ -25,11 +26,11 @@ public class LevelMaps : MonoBehaviour
         {
             new int[] {0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
             new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 0},
-            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
-            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
-            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
-            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
-            new int[] {0, 0, 0, 0, 0, 1, 3, 1, 0, 0, 0, 0, 0, 0},
+            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0},
+            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0},
+            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 1, 3, 1, 0},
+            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 3, 0, 3, 0, 0},
+            new int[] {0, 0, 0, 0, 0, 1, 3, 1, 1, 1, 1, 1, 0, 0},
             new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0},
             new int[] {0, 0, 1, 1, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0},
@@ -39,8 +40,8 @@ public class LevelMaps : MonoBehaviour
             new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
         
-        enemyPosition[0] = new Position { x = 10, y = 1 };
-        enemyPosition[1] = new Position { x = 1, y = 2 };
-        enemyPosition[2] = new Position { x = 9, y = 9 };
+        enemyPosition[0] = new Position { x = 11, y = 1 };
+        // enemyPosition[1] = new Position { x = 1, y = 2 };
+        // enemyPosition[2] = new Position { x = 9, y = 9 };
     }
 }

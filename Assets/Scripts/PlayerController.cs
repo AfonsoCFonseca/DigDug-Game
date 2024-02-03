@@ -166,4 +166,9 @@ public class PlayerController : MonoBehaviour
         Slot slot = otherCollider.GetComponent<Slot>();
         slot.setToDigged();
     }
+
+    public Tile getCurrentTile()
+    {
+        return currentTile;
+    }
 }

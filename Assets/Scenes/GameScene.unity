@@ -485,6 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 2077797049741419797, guid: dfa8592a3ab434b2aaf3a06f9382a47b, type: 3}
+  enemy: {fileID: 145241851791635379, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
 --- !u!114 &387821846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,6 +513,7 @@ MonoBehaviour:
   STARTING_TILE_POSITION: {x: -5, y: 0.35}
   STARTING_PLAYER_DIRECTION: 2
   PLAYER_TO_TILE_DISTANCE: 0.1
+  ENEMY_DISTANCE_TO_NEXT_TILE: 2.7
 --- !u!114 &387821848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1585,7 +1587,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.33
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1626,6 +1628,10 @@ PrefabInstance:
     - target: {fileID: 145241851791635383, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
       propertyPath: m_Name
       value: Pookas
+      objectReference: {fileID: 0}
+    - target: {fileID: 145241851791635383, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}

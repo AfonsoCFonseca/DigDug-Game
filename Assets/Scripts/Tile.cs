@@ -110,26 +110,26 @@ public class Tile : MonoBehaviour
 
         return idBuilder.ToString();
     }
+    
     //if one of the slots is different than 0 it means it's empty
-    public bool isFilled()
+    public bool isFilled(Direction dir)
     {
-        bool isFilled = false;
-        for(int i = 0 ; i < horizontalSlots.Length; i++)
-        {
-            if(horizontalSlots[i] == 0) {
-                isFilled = true;
-            }
-        }
-
+        bool isFilled = CheckSlots(horizontalSlots);
         if(!isFilled) return isFilled;
-        
-        for(int j = 0 ; j < verticalSlots.Length; j++)
-        {
-            if(verticalSlots[j] == 0) {
-                isFilled = true;
-            }
-        }
-
+        isFilled = CheckSlots(verticalSlots);
         return isFilled;
     }
+
+    private bool CheckSlots(int[] slots)
+    {
+        foreach (int slot in slots)
+        {
+            if (slot == 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
         utils = levelManager.GetComponent<Utils>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
 
-        currentPhase = Phase.Chase;
+        currentPhase = Phase.Moving;
     }
 
     void Update()
@@ -109,11 +109,10 @@ public class Enemy : MonoBehaviour
         foreach (Direction direction in allDirections)
         {
             Tile possibleNeighbourTile = levelManager.GetNeighbourTile(currentTile, direction);
-            if(!possibleNeighbourTile.isFilled()) {
+            if(possibleNeighbourTile && !possibleNeighbourTile.isFilled(direction)) {
                 possibleDirections.Add(direction);
             }
         }
-
         return possibleDirections;
     }
 
@@ -144,6 +143,5 @@ public class Enemy : MonoBehaviour
     private void Chase()
     {
         animator.SetBool("isChasing", true);
-        Debug.Log(playerController.getCurrentTile());
     }
 }

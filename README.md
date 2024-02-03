@@ -10,7 +10,7 @@ Classic DigDug game developed in a Unity 2D project
 
 
 ### LevelManager ###
-Responsible for drawing the map based on a 2D array of 14 by 14 integers passed by the LevelMap script, it iterates through every position of the array and sets the slots for each tile.
+Responsible for drawing the map based on a 2D array of 14 by 14 integers passed by the LevelMap script, it iterates through every position of the array and sets the slots for each tile. Also responsible for returning all the values related to the map and tiles. Handles the spawn of the different enemies in the current map
 
 ### PlayerController ###
 The character moves along the X and Y axes by applying speed and Time.deltaTime to the transform.position for each arrow key stroke. Additionally, during movement, an animation is applied to the player sprite based on an Image Spritesheet. The sprite is flipped, and the Quaternion is rotated depending on whether the movement is up/down or left/right.
@@ -19,6 +19,9 @@ The character moves along the X and Y axes by applying speed and Time.deltaTime 
 A tile represents one-fourteenth of the X-axis and one-fourteenth of the Y-axis of the map, through which the player will move. The tile is determined by the integer mentioned in the desired map array for the tile's position. For example, the number 0 represents an undug tile, while numbers 1 or 2 represent a dug tile in the horizontal or vertical position.
 
 Additionally, a tile is composed of 8 slots (4 horizontal and 4 vertical), representing a more detailed representation of how the tile has been dug.
+
+### Enemy ###
+A general class is responsible for drawing the enemies and their animations. The class has three states: moving, ghost, and dying. In the moving state, it checks for available tiles, choosing between intersections, and follows the player if the tiles are connected. In Chase mode, it can move through filled tiles and moves towards the last tile where the player passed. The dying mode occurs when the player kills the enemy, triggering the animation of the dying frames and deleting the class at the end.
 
 
 ---------------------------------------------------------------
@@ -34,6 +37,10 @@ Next, I shifted the building proccess of the game and changed to the UI implemen
 
 After starting to implement the digging logic, I created a 2D box collider in my player GameObject that detects trigger collisions with any of the tile Slots. When a collision occurs, it activates the rendering of the slots and deactivates their colliders. To simplify collision detection based on direction (up/down or right/left), I began tracking the player's orientation using booleans. Once the movement and excavation were established, I applied general limitations to player movement, such as restricting movement beyond the board's limits and allowing backward movement. In this game, backward movement is the only direction allowed, even if the next neighbor Tile position is already set.
 
+I started working on the Enemy class, initially focusing on applying animations to the enemy and its spawning on the map. After that, I concentrated on creating three state enums: Move, Chase, and Dead for the class and worked on the Move state. The Move state involves moving in one of the four directions, choosing between directions when arriving at an intersection, and turning back when reaching a dead end. Once this was achieved, I added the new enemy to the game and applied the logic for map spawning. After that, I began focusing on implementing the logic for the enemy to follow the player once the tiles are connected between them.
+
+Then I developed the chase Mode
+
 
 # Future Implementation
 
@@ -43,4 +50,5 @@ After starting to implement the digging logic, I created a 2D box collider in my
 
  <p float="left">
    <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_1.png'>
+   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_2.png'>
  </p>

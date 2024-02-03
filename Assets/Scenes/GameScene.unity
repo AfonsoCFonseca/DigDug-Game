@@ -485,7 +485,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 2077797049741419797, guid: dfa8592a3ab434b2aaf3a06f9382a47b, type: 3}
-  enemy: {fileID: 145241851791635379, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
 --- !u!114 &387821846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,6 +497,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8555149a85d4790bc844f0be9f47f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pookas: {fileID: 145241851791635383, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
+  fygars: {fileID: 145241851791635383, guid: f6a1627af1d084611b5c1ec62f4243cf, type: 3}
+  enemies: []
 --- !u!114 &387821847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1574,67 +1576,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &145241852044810167
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 6.292624
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635382, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635383, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_Name
-      value: Pookas
-      objectReference: {fileID: 0}
-    - target: {fileID: 145241851791635383, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
 --- !u!1001 &8463308266825680252
 PrefabInstance:
   m_ObjectHideFlags: 0

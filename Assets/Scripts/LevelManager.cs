@@ -13,8 +13,11 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     public Tile tile;
 
-    [SerializeField]
-    private Enemy enemy;
+    // [SerializeField]
+    // private GameObject pookas;
+    // [SerializeField]
+    // private GameObject fygars;
+
     
     private Tile[,] mapArray;
     private LevelMaps levelMaps;
@@ -54,12 +57,12 @@ public class LevelManager : MonoBehaviour
 
     void enemySpawn()
     {
-        for(int i = 0; i < levelMaps.enemyPosition.Length; i++)
+        for(int i = 0; i < levelMaps.enemyPosition.Count; i++)
         {
             Position pos = levelMaps.enemyPosition[i];
             Tile enemyTile = GetCurrentTileByArrayPosition(pos.x, pos.y);
             Vector2 currentPosition = new Vector2(enemyTile.transform.position.x, enemyTile.transform.position.y);
-            Instantiate(enemy, currentPosition, Quaternion.identity);
+            Instantiate(levelMaps.enemies[i], currentPosition, Quaternion.identity);
         }
     }
 
@@ -114,7 +117,7 @@ public class LevelManager : MonoBehaviour
         int mapY = currentTile.getMapTilePosition().mapY;
 
         if (!isBoardLimit(mapX, mapY, direction)){
-            return mapArray[mapY, mapX];
+            return null;
         }
 
         switch (direction)

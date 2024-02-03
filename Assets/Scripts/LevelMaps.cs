@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Position
 {
@@ -8,8 +11,14 @@ public class Position
 
 public class LevelMaps : MonoBehaviour
 {
+    // LevelManager levelManager
+    [SerializeField]
+    private GameObject pookas;
+    [SerializeField]
+    private GameObject fygars;
 
-    public Position[] enemyPosition = new Position[1];
+    public List<Position> enemyPosition = new List<Position>();
+    public List<GameObject> enemies = new List<GameObject>();
     public int[][] map;
 
     void Start()
@@ -29,7 +38,7 @@ public class LevelMaps : MonoBehaviour
             new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0},
             new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0},
             new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 1, 1, 3, 1, 0},
-            new int[] {0, 2, 0, 0, 0, 0, 2, 0, 0, 3, 0, 3, 0, 0},
+            new int[] {0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0},
             new int[] {0, 0, 0, 0, 0, 1, 3, 1, 1, 1, 1, 1, 0, 0},
             new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0},
@@ -40,8 +49,12 @@ public class LevelMaps : MonoBehaviour
             new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
         
-        enemyPosition[0] = new Position { x = 11, y = 1 };
-        // enemyPosition[1] = new Position { x = 1, y = 2 };
-        // enemyPosition[2] = new Position { x = 9, y = 9 };
+        enemyPosition.Add(new Position { x = 6, y = 2 });
+        enemyPosition.Add(new Position { x = 1, y = 2 });
+        enemyPosition.Add(new Position { x = 11, y = 2 });
+
+        enemies.Add(pookas);
+        enemies.Add(pookas);
+        enemies.Add(fygars);
     }
 }

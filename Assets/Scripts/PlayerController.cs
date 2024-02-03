@@ -157,8 +157,8 @@ public class PlayerController : MonoBehaviour
     private bool isPossibleNewNeighbourTile(Direction requestedDirection, Tile neighbourTile)
     {
         float distanceToTarget = Vector2.Distance(transform.position, currentNeighbourTile.transform.position);
-        return (requestedDirection == utils.GetOppositeDirection(currentDirection) || 
-            currentNeighbourTile.getId() !=  neighbourTile.getId() && distanceToTarget <= gameValues.PLAYER_TO_TILE_DISTANCE);
+        return (neighbourTile && requestedDirection == utils.GetOppositeDirection(currentDirection) || 
+        neighbourTile && currentNeighbourTile.getId() !=  neighbourTile.getId() && distanceToTarget <= gameValues.PLAYER_TO_TILE_DISTANCE);
     }
 
     private void HandleDigCollision(Collider2D otherCollider)

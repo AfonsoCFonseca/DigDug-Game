@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
     private void MovePlayer(Direction requestedDirection)
     {
         currentNeighbourTile = CalculateNextTileNeighbour(requestedDirection);
-        currentNeighbourTile.setDebugToColor("target");
+
         //sets the player movement
         Vector2 targetPosition = currentNeighbourTile.transform.position;
         Vector2 moveDirection = (targetPosition - (Vector2)transform.position).normalized;
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
     private void HandleDigCollision(Collider2D otherCollider)
     {
         Slot slot = otherCollider.GetComponent<Slot>();
-        slot.setToDigged();
+        slot.SetToDigged();
     }
 
     public Tile getCurrentTile()

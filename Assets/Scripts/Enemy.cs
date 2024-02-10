@@ -83,12 +83,12 @@ public class Enemy : MonoBehaviour
     private Tile GetNewNeighbour()
     {
         Tile currentNewNeighbourTile;
-        if (neighbourTile != null) neighbourTile.setDebugToColor("default");
+        // if (neighbourTile != null) neighbourTile.setDebugToColor("default");
         List<Direction> possibleDirections = GetAllPossibleDirections();
         currentDirection = PickOneOfTheDirections(possibleDirections);
         RotateSprite(currentDirection);
         currentNewNeighbourTile = levelManager.GetNeighbourTile(currentTile, currentDirection);
-        currentNewNeighbourTile.setDebugToColor("debug");
+
         canGetNewNeighbour = false;
         return currentNewNeighbourTile;
     }
@@ -109,7 +109,7 @@ public class Enemy : MonoBehaviour
         foreach (Direction direction in allDirections)
         {
             Tile possibleNeighbourTile = levelManager.GetNeighbourTile(currentTile, direction);
-            if(possibleNeighbourTile && !possibleNeighbourTile.isFilled(direction)) {
+            if(possibleNeighbourTile && !possibleNeighbourTile.isFilled()) {
                 possibleDirections.Add(direction);
             }
         }

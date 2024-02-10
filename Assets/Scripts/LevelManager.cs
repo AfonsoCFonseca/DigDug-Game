@@ -66,7 +66,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    (int[] horizontal, int[] vertical) readTileFromLevelMap(int y, int x) 
+    public (int[] horizontal, int[] vertical) readTileFromLevelMap(int y, int x) 
     {
         int[] horizontal = new int[] { 0, 0, 0, 0 };
         int[] vertical = new int[] { 0, 0, 0, 0 };
@@ -149,6 +149,20 @@ public class LevelManager : MonoBehaviour
         }
 
         return currentTile;
+    }
+
+    //I use this method instead of Tile.isFilled when the board isn't yet drawn but
+    //i need to know the state of the future tile
+    public bool IsFutureTileEmpty(int tileArrayPosX, int tileArrayPosY, bool isOrientationHorizontal)
+    {
+        (int[] horizontal, int[] vertical) result = readTileFromLevelMap(tileArrayPosY, tileArrayPosX);
+        bool isEmpty = true;
+        int[] arrSlots = isOrientationHorizontal ? result.horizontal : result.vertical;
+        foreach (int slotNum in arrSlots) {
+            if(slotNum == 0)
+                isEmpty = false;
+        }
+        return isEmpty;
     }
 
     private bool isBoardLimit(int mapX, int mapY, Direction direction)

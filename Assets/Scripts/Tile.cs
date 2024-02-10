@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    private LevelManager levelManager;
+
     const int TOTAL_SLOTS = 4;
     string id = "";
     int tileArrayPosX = 0;
@@ -21,20 +23,22 @@ public class Tile : MonoBehaviour
     public Color debugColor1 = Color.yellow;
     public Color defaultColor = Color.red;
 
-
-    void Start()
+    void Awake()
     {
         id = GenerateID(10);
         debugFlag = transform.Find(DEBUG_OBJ_NAME);
         debugFlagRenderer = debugFlag.GetComponent<Renderer>();
         debugFlagRenderer.material.color = defaultColor;
+
+        GameObject gameManager = GameObject.FindGameObjectsWithTag("GameManager")[0];
+        levelManager = gameManager.GetComponent<LevelManager>();
     }
 
     public void Setup(int[] vertSlots, int[] horiSlots, int mapY, int mapX)
     {
-        DrawInitialSlots(vertSlots, horiSlots);
         tileArrayPosY = mapY;
         tileArrayPosX = mapX;
+        DrawInitialSlots(vertSlots, horiSlots);
     }
 
     public string getId()
@@ -57,6 +61,7 @@ public class Tile : MonoBehaviour
 
     public void setDebugToColor(string type)
     {
+        debugFlag.gameObject.SetActive(true);
         if(type == "default") debugFlagRenderer.material.color = defaultColor;
         if(type == "target") debugFlagRenderer.material.color = targetColor;
         if(type == "debug") debugFlagRenderer.material.color = debugColor;
@@ -86,14 +91,38 @@ public class Tile : MonoBehaviour
 
     void updateChildren(string ob_child_name, int pos)
     {
-        Transform childTransform = this.transform.Find(ob_child_name + pos);
-        if(childTransform) 
+        Slot slot = transform.Find(ob_child_name + pos).GetComponent<Slot>();
+        if(slot) 
         {
-            SpriteRenderer spriteRenderer = childTransform.GetComponent<SpriteRenderer>();
-            spriteRenderer.enabled = true;
-            BoxCollider2D boxCollider2D = childTransform.GetComponent<BoxCollider2D>();
+            slot.SetToDigged();
+            if(pos == 3) //check the limit of the board by setting an empty slot in the limit board
+            {
+                bool isHorizontal = IsHorizontal(ob_child_name);
+                int posTileX = isHorizontal ? tileArrayPosX + 1 : tileArrayPosX;
+                int posTileY = isHorizontal ? tileArrayPosY : tileArrayPosY + 1;
+                if(!levelManager.IsFutureTileEmpty(posTileX, posTileY, isHorizontal))
+                {
+                    slot.SwitchToEndSlot(false);
+                }
+            }
+            if(pos == 0)
+            {
+                bool isHorizontal = IsHorizontal(ob_child_name);
+                int posTileX = isHorizontal && tileArrayPosX > 0 ? tileArrayPosX - 1 : tileArrayPosX;
+                int posTileY = !isHorizontal && tileArrayPosY > 0 ? tileArrayPosY - 1 : tileArrayPosY;
+                if(!levelManager.IsFutureTileEmpty(posTileX, posTileY, isHorizontal) || tileArrayPosY == 0)
+                {
+                    slot.SwitchToEndSlot(true);
+                }
+            }
+            BoxCollider2D boxCollider2D = slot.GetComponent<BoxCollider2D>();
             boxCollider2D.enabled = false;
         }
+    }
+
+    bool IsHorizontal(string type) 
+    {
+        return type == "h_";
     }
 
     private string GenerateID(int length)
@@ -112,7 +141,7 @@ public class Tile : MonoBehaviour
     }
     
     //if one of the slots is different than 0 it means it's empty
-    public bool isFilled(Direction dir)
+    public bool isFilled()
     {
         bool isFilled = CheckSlots(horizontalSlots);
         if(!isFilled) return isFilled;

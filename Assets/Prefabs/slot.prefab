@@ -125,4 +125,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   normalSlot: {fileID: 21300000, guid: b17cf9e0ec9ee45499e8ee566bf47718, type: 3}
-  endSlot: {fileID: 21300000, guid: bedbc98109fca43a9a8f6be0c47e129f, type: 3}
+  endSlot: {fileID: 21300000, guid: 7e175b56be68348e3861f3ea0b4961f1, type: 3}

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    const int WIDTH_MAP_TILES = 14;
-    const int HEIGHT_MAP_TILES = 14;
+    public int WIDTH_MAP_TILES = 14;
+    public int HEIGHT_MAP_TILES = 14;
 
     public const float INITIAL_MAP_X = -35.0f;
     public const float INITIAL_MAP_Y = 30.35f;
@@ -13,12 +13,6 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     public Tile tile;
 
-    // [SerializeField]
-    // private GameObject pookas;
-    // [SerializeField]
-    // private GameObject fygars;
-
-    
     private Tile[,] mapArray;
     private LevelMaps levelMaps;
     private GameValues gameValues;
@@ -48,9 +42,9 @@ public class LevelManager : MonoBehaviour
                 Vector2 currentPosition = new Vector2(currentX, currentY);
                 mapArray[i, j] = Instantiate(tile, currentPosition, Quaternion.identity);
 
-                (int[] horizontal, int[] vertical) result = readTileFromLevelMap(i,j);
+                int[] tileSlotsState = readTileFromLevelMap(i, j);
 
-                mapArray[i, j].GetComponent<Tile>().Setup(result.vertical, result.horizontal, i, j);
+                mapArray[i, j].GetComponent<Tile>().Setup(tileSlotsState, i, j);
             }
         }
     }
@@ -66,22 +60,17 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public (int[] horizontal, int[] vertical) readTileFromLevelMap(int y, int x) 
+    public int[] readTileFromLevelMap(int y, int x) 
     {
-        int[] horizontal = new int[] { 0, 0, 0, 0 };
-        int[] vertical = new int[] { 0, 0, 0, 0 };
+        int[] axisArrayState = new int[] { 0, 0, 0, 0 };
 
-        if(levelMaps.map[y][x] == 1) {
-            horizontal = new int[] { 1, 1, 1, 1 };
-        }
-        if(levelMaps.map[y][x] == 2) {
-            vertical = new int[] { 2, 2, 2, 2 };
-        }
-        if(levelMaps.map[y][x] == 3) {
-            horizontal = new int[] { 3, 3, 3, 3 };
+        int slotState = levelMaps.map[y][x];
+
+        if(slotState == 1 || slotState == 2 || slotState == 3) {
+            axisArrayState = new int[] { slotState, slotState, slotState, slotState };
         }
 
-        return (horizontal, vertical);
+        return axisArrayState;
     }
 
     private Tile GetCurrentTileByArrayPosition(int posX, int posY)
@@ -153,16 +142,15 @@ public class LevelManager : MonoBehaviour
 
     //I use this method instead of Tile.isFilled when the board isn't yet drawn but
     //i need to know the state of the future tile
-    public bool IsFutureTileEmpty(int tileArrayPosX, int tileArrayPosY, bool isOrientationHorizontal)
+    public bool IsFutureTileEmpty(int tileArrayPosX, int tileArrayPosY)
     {
-        (int[] horizontal, int[] vertical) result = readTileFromLevelMap(tileArrayPosY, tileArrayPosX);
-        bool isEmpty = true;
-        int[] arrSlots = isOrientationHorizontal ? result.horizontal : result.vertical;
-        foreach (int slotNum in arrSlots) {
-            if(slotNum == 0)
-                isEmpty = false;
+        int[] tileSlotsState = readTileFromLevelMap(tileArrayPosY, tileArrayPosX);
+        for(int i = 0; i < tileSlotsState.Length; i++)
+        {
+            if(tileSlotsState[i] == 0)
+                return false;
         }
-        return isEmpty;
+        return true;
     }
 
     private bool isBoardLimit(int mapX, int mapY, Direction direction)

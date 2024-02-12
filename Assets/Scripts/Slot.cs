@@ -17,22 +17,11 @@ public class Slot : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public int getCurrentTileX() 
-    {
-        return (int) ((transform.position.x - LevelManager.INITIAL_MAP_X) / SLOT_WIDTH);
-    }
-
-     public int getCurrentTileY() 
-    {
-        return Mathf.Abs((int) ((transform.position.y - LevelManager.INITIAL_MAP_Y) / SLOT_HEIGHT));
-    }
-
     public void SetToDigged()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.enabled = true;
-        BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
-        boxCollider2D.enabled = false;
+        spriteRenderer.sprite = normalSlot;
     }
 
     public void SwitchToEndSlot(bool isLeftSide)
@@ -44,5 +33,37 @@ public class Slot : MonoBehaviour
             spriteRenderer.transform.localScale = scale;
         }
         spriteRenderer.sprite = endSlot;
+    }
+
+    public int getSlotPositionInTile()
+    {
+        string goName = gameObject.name;
+        int underscoreIndex = goName.IndexOf('_');
+
+        if (underscoreIndex != -1 && underscoreIndex < goName.Length - 1)
+        {
+            return int.Parse(goName.Substring(underscoreIndex + 1));
+        }
+        else
+        {
+            Debug.LogError("Failed to extract part after underscore from the name: " + goName);
+            return 0;
+        }
+    }
+
+    public bool IsVertical()
+    {
+        string goName = gameObject.name;
+        int underscoreIndex = goName.IndexOf('_');
+
+        if (underscoreIndex != -1 && underscoreIndex < goName.Length - 1)
+        {
+            return goName.Substring(0, underscoreIndex) == "v";
+        }
+        else
+        {
+            Debug.LogError("Failed to extract part after underscore from the name: " + goName);
+            return false;
+        }
     }
 }

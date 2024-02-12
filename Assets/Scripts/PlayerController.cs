@@ -36,7 +36,8 @@ public class PlayerController : MonoBehaviour
 
         if (excavatorCollider != null)
         {
-            excavatorCollider.OnCollisionEvent += HandleDigCollision;
+            excavatorCollider.ExcavatorOnTriggerEnter += HandleDigCollision;
+            excavatorCollider.ExcavatorOnTriggerExit += HandleDigExit;
         }
     }
     
@@ -165,6 +166,17 @@ public class PlayerController : MonoBehaviour
     {
         Slot slot = otherCollider.GetComponent<Slot>();
         slot.SetToDigged();
+    }
+
+    private void HandleDigExit(Collider2D otherCollider)
+    {
+        Slot slot = otherCollider.GetComponent<Slot>();
+        bool isSlotZeroPosition = slot.getSlotPositionInTile() == 0;
+        if(slot.IsVertical() == true && (currentDirection == Direction.East || currentDirection == Direction.West) ||
+            slot.IsVertical() == false && (currentDirection == Direction.North || currentDirection == Direction.South))
+        {
+            slot.SwitchToEndSlot(isSlotZeroPosition);
+        }
     }
 
     public Tile getCurrentTile()

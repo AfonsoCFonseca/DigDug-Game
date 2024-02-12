@@ -34,11 +34,11 @@ public class Tile : MonoBehaviour
         levelManager = gameManager.GetComponent<LevelManager>();
     }
 
-    public void Setup(int[] vertSlots, int[] horiSlots, int mapY, int mapX)
+    public void Setup(int[] slots, int mapY, int mapX)
     {
         tileArrayPosY = mapY;
         tileArrayPosX = mapX;
-        DrawInitialSlots(vertSlots, horiSlots);
+        DrawInitialSlots(slots);
     }
 
     public string getId()
@@ -51,10 +51,10 @@ public class Tile : MonoBehaviour
         return (tileArrayPosX, tileArrayPosY);
     }
 
-    public void DrawInitialSlots(int[] vertSlots, int[] horiSlots)
+    public void DrawInitialSlots(int[] slots)
     {
-        verticalSlots = vertSlots;
-        horizontalSlots = horiSlots;
+        verticalSlots = slots;
+        horizontalSlots = slots;
 
         updateTileTextures();
     }
@@ -80,7 +80,7 @@ public class Tile : MonoBehaviour
             if(horizontalSlots[i] == 1 || horizontalSlots[i] == 3) 
             {
                 updateChildren("h_", i);
-            } 
+            }
         }
 
         if(horizontalSlots[0] == 3)
@@ -95,34 +95,27 @@ public class Tile : MonoBehaviour
         if(slot) 
         {
             slot.SetToDigged();
-            if(pos == 3) //check the limit of the board by setting an empty slot in the limit board
+            bool isVertical = slot.IsVertical();
+            if(pos == 3)
             {
-                bool isHorizontal = IsHorizontal(ob_child_name);
-                int posTileX = isHorizontal ? tileArrayPosX + 1 : tileArrayPosX;
-                int posTileY = isHorizontal ? tileArrayPosY : tileArrayPosY + 1;
-                if(!levelManager.IsFutureTileEmpty(posTileX, posTileY, isHorizontal))
+                int posTileX = isVertical ? tileArrayPosX : tileArrayPosX + 1;
+                int posTileY = isVertical ? tileArrayPosY + 1 : tileArrayPosY;
+                if(posTileX > levelManager.WIDTH_MAP_TILES - 1 || posTileY > levelManager.HEIGHT_MAP_TILES - 1
+                    || !levelManager.IsFutureTileEmpty(posTileX, posTileY))
                 {
                     slot.SwitchToEndSlot(false);
                 }
             }
             if(pos == 0)
             {
-                bool isHorizontal = IsHorizontal(ob_child_name);
-                int posTileX = isHorizontal && tileArrayPosX > 0 ? tileArrayPosX - 1 : tileArrayPosX;
-                int posTileY = !isHorizontal && tileArrayPosY > 0 ? tileArrayPosY - 1 : tileArrayPosY;
-                if(!levelManager.IsFutureTileEmpty(posTileX, posTileY, isHorizontal) || tileArrayPosY == 0)
+                int posTileX = isVertical && tileArrayPosX > 0 ? tileArrayPosX : tileArrayPosX - 1;
+                int posTileY = isVertical && tileArrayPosY > 0 ? tileArrayPosY - 1 : tileArrayPosY;
+                if(tileArrayPosY == 0 || tileArrayPosX == 0 || !levelManager.IsFutureTileEmpty(posTileX, posTileY))
                 {
                     slot.SwitchToEndSlot(true);
                 }
             }
-            BoxCollider2D boxCollider2D = slot.GetComponent<BoxCollider2D>();
-            boxCollider2D.enabled = false;
         }
-    }
-
-    bool IsHorizontal(string type) 
-    {
-        return type == "h_";
     }
 
     private string GenerateID(int length)

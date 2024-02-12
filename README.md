@@ -38,8 +38,8 @@ Next, I shifted the building proccess of the game and changed to the UI implemen
 After starting to implement the digging logic, I created a 2D box collider in my player GameObject that detects trigger collisions with any of the tile Slots. When a collision occurs, it activates the rendering of the slots and deactivates their colliders. To simplify collision detection based on direction (up/down or right/left), I began tracking the player's orientation using booleans. Once the movement and excavation were established, I applied general limitations to player movement, such as restricting movement beyond the board's limits and allowing backward movement. In this game, backward movement is the only direction allowed, even if the next neighbor Tile position is already set.
 
 <p float="left">
-   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_1.png.png'>
-   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_2.png.png'>
+   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_1.png'>
+   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_2.png'>
  </p>
 
 I started working on the Enemy class, initially focusing on applying animations to the enemy and its spawning on the map. After that, I concentrated on creating three state enums: Move, Chase, and Dead for the class and worked on the Move state. The Move state involves moving in one of the four directions, choosing between directions when arriving at an intersection, and turning back when reaching a dead end. Once this was achieved, I added the new enemy to the game and applied the logic for map spawning. After that, I began focusing on implementing the logic for the enemy to follow the player once the tiles are connected between them.

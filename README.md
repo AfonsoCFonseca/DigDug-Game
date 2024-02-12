@@ -33,20 +33,29 @@ I applied the background map and the dug images to the dug chunks/tiles and made
 Afterward, I implemented the first player movement by enabling movement along the X and Y axes without restrictions. I also added sprite animation that flips or rotates the sprite depending on the direction of the player's movement. 
 When calculating the movement, I developed the system that reaches the next tile based on the direction you are heading and updates the player transform.position to that location. The player must stick to this position until he reaches it, regardless the key pressed
 
+<div align="center">
+   <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_1.png'>
+   <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_1.png'>
+</div>
+
 Next, I shifted the building proccess of the game and changed to the UI implementation system. Added the life system and UI, implemented the highscore and score system and added the rounds UI and functions (levels)
 
 After starting to implement the digging logic, I created a 2D box collider in my player GameObject that detects trigger collisions with any of the tile Slots. When a collision occurs, it activates the rendering of the slots and deactivates their colliders. To simplify collision detection based on direction (up/down or right/left), I began tracking the player's orientation using booleans. Once the movement and excavation were established, I applied general limitations to player movement, such as restricting movement beyond the board's limits and allowing backward movement. In this game, backward movement is the only direction allowed, even if the next neighbor Tile position is already set.
 
-<p float="left">
-   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_1.png'>
-   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_2.png'>
- </p>
-
 I started working on the Enemy class, initially focusing on applying animations to the enemy and its spawning on the map. After that, I concentrated on creating three state enums: Move, Chase, and Dead for the class and worked on the Move state. The Move state involves moving in one of the four directions, choosing between directions when arriving at an intersection, and turning back when reaching a dead end. Once this was achieved, I added the new enemy to the game and applied the logic for map spawning. After that, I began focusing on implementing the logic for the enemy to follow the player once the tiles are connected between them.
+
+<div align="center">
+   <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_2.png'>
+   <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_2.png'>
+</div>
 
 Before initiating the Chase Mode for the enemies, I first had to refine the digging system and construct the initial map tunnels. I uploaded a new image for the slot, representing a round-ended tunnel, and added it as a sprite to the Slot class. During the initial map construction, each tile checks its orientation and the adjacent tile. If the tile is filled with dirt, the last or first slot (depending on the orientation) of the tile changes to the end rounded slot, providing a more natural feeling to the tunnel.
 
 The same approach was implemented during gameplay when the player begins to dig and changes direction. At this point, the code became challenging to comprehend, prompting me to perform some refactoring and address a few bugs.
+
+<div align="center">
+   <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_3.png'>
+</div>
 
 
 # Future Implementation
@@ -54,9 +63,3 @@ The same approach was implemented during gameplay when the player begins to dig 
 
 ---------------------------------------------------------------
 # Sketches & Evolution
-
- <p float="left">
-   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_1.png'>
-   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_2.png'>
-   <img width="200" height="300" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_3.png'>
- </p>

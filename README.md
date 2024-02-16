@@ -54,7 +54,7 @@ Before initiating the Chase Mode for the enemies, I first had to refine the digg
 The same approach was implemented during gameplay when the player begins to dig and changes direction. At this point, the code became challenging to comprehend, prompting me to perform some refactoring and address a few bugs.
 
 <div align="center">
-   <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_3.png'>
+   <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_4.png'>
 </div>
 
 

@@ -96,7 +96,7 @@ public class Enemy : MonoBehaviour
     private void MoveTransistion()
     {
         Vector2 targetPosition = neighbourTile.transform.position;
-        Vector2 moveDirection = (targetPosition - (Vector2)transform.position).normalized;
+        Vector2 moveDirection = (targetPosition - (Vector2) transform.position).normalized;
         Vector2 newPosition = (Vector2)transform.position + moveDirection * speed * Time.deltaTime;
         transform.position = newPosition;
     }
@@ -109,7 +109,16 @@ public class Enemy : MonoBehaviour
         foreach (Direction direction in allDirections)
         {
             Tile possibleNeighbourTile = levelManager.GetNeighbourTile(currentTile, direction);
-            if(possibleNeighbourTile && !possibleNeighbourTile.isFilled()) {
+            
+            bool isVertical = utils.IsVerticalAxis(direction);
+
+
+            if(possibleNeighbourTile && !possibleNeighbourTile.isFilled() && 
+                !(direction == Direction.West && currentTile.GetSlot(0, isVertical).IsEndSlot()) && 
+                !(direction == Direction.East && currentTile.GetSlot(3, isVertical).IsEndSlot()) && 
+                !(direction == Direction.South && currentTile.GetSlot(3, isVertical).IsEndSlot()) && 
+                !(direction == Direction.North && currentTile.GetSlot(0, isVertical).IsEndSlot()) 
+                ) {
                 possibleDirections.Add(direction);
             }
         }
@@ -124,7 +133,7 @@ public class Enemy : MonoBehaviour
             Direction specificDirection = possibleDirections.Find(
                 dir => dir == utils.GetOppositeDirection(currentDirection));
 
-            if (possibleDirections.Contains(specificDirection))
+            if (possibleDirections.Contains(specificDirection) )
             {
                 possibleDirections.Remove(specificDirection);
             }

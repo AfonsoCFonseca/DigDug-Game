@@ -11,8 +11,9 @@ public class PlayerController : MonoBehaviour
     private GameValues gameValues;
     private Utils utils;
 
-    [SerializeField] private float speed = 6.0f;
+    [SerializeField] private float speed = 8.0f;
     Direction currentDirection;
+    Direction previousDirection;
 
     private Tile currentTile;
     private Tile currentNeighbourTile;
@@ -104,6 +105,7 @@ public class PlayerController : MonoBehaviour
 
         if(isPossibleNewNeighbourTile(requestedDirection, neighbourTile))
         {
+            previousDirection = currentDirection;
             currentDirection = requestedDirection;
             UpdatesPlayerRotation(currentDirection);
             return neighbourTile;
@@ -171,9 +173,20 @@ public class PlayerController : MonoBehaviour
     private void HandleDigExit(Collider2D otherCollider)
     {
         Slot slot = otherCollider.GetComponent<Slot>();
-        bool isSlotZeroPosition = slot.getSlotPositionInTile() == 0;
-        if(slot.IsVertical() == true && (currentDirection == Direction.East || currentDirection == Direction.West) ||
-            slot.IsVertical() == false && (currentDirection == Direction.North || currentDirection == Direction.South))
+        int slotPosition = slot.getSlotPositionInTile();
+        bool isSlotZeroPosition = slotPosition == 0;
+
+        Tile neighbourTile = levelManager.GetNeighbourTile(slot.GetParentTile(), previousDirection);
+        bool isNeighbourFill = neighbourTile.isFilled();
+        bool isPlayerMovingVertically = utils.IsVerticalAxis(currentDirection);
+        bool isLastSlotEndTile = slot.IsEndSlot();
+        bool isSlotInVerticalPosition = slot.IsVertical();
+        bool isCurrentSlotAndNeighbourTileValid = (isLastSlotEndTile || isNeighbourFill);
+
+        // make sure the current slot is vertical and the player is now moving in the opposite direction
+        // validate if the last slot of the current tile is an EndSlot or if the neighbour tile is filled with dirt
+        if(isSlotInVerticalPosition && !isPlayerMovingVertically && isCurrentSlotAndNeighbourTileValid ||
+            !isSlotInVerticalPosition && isPlayerMovingVertically && isCurrentSlotAndNeighbourTileValid)
         {
             slot.SwitchToEndSlot(isSlotZeroPosition);
         }

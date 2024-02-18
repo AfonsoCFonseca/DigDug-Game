@@ -484,6 +484,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa213f6ea9e744549a7c13c745888e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WIDTH_MAP_TILES: 14
+  HEIGHT_MAP_TILES: 14
   tile: {fileID: 2077797049741419797, guid: dfa8592a3ab434b2aaf3a06f9382a47b, type: 3}
 --- !u!114 &387821846
 MonoBehaviour:
@@ -1403,7 +1405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1798151701
 MonoBehaviour:
   m_ObjectHideFlags: 0

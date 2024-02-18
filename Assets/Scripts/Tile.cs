@@ -11,8 +11,11 @@ public class Tile : MonoBehaviour
     int tileArrayPosX = 0;
     int tileArrayPosY = 0;
 
-    int[] verticalSlots = new int [TOTAL_SLOTS] { 0, 0, 0, 0 };
-    int[] horizontalSlots = new int [TOTAL_SLOTS] { 0, 0, 0, 0 };
+    int[] verticalSlotsStates = new int [TOTAL_SLOTS] { 0, 0, 0, 0 };
+    int[] horizontalSlotsStates = new int [TOTAL_SLOTS] { 0, 0, 0, 0 };
+    // Slot[] verticalSlots = new Slot[4];
+    List<Slot> verticalSlots = new List<Slot>();
+    List<Slot> horizontalSlots = new List<Slot>();
 
     //Debugging tool
     private Transform debugFlag;
@@ -38,7 +41,8 @@ public class Tile : MonoBehaviour
     {
         tileArrayPosY = mapY;
         tileArrayPosX = mapX;
-        DrawInitialSlots(slots);
+        setSlotVariables(slots);
+        updateTileTextures();
     }
 
     public string getId()
@@ -51,12 +55,24 @@ public class Tile : MonoBehaviour
         return (tileArrayPosX, tileArrayPosY);
     }
 
-    public void DrawInitialSlots(int[] slots)
+    private void setSlotVariables(int[] slots)
     {
-        verticalSlots = slots;
-        horizontalSlots = slots;
+        verticalSlotsStates = slots;
+        horizontalSlotsStates = slots;
 
-        updateTileTextures();
+        foreach (Transform childTransform in transform)
+        {
+            if (childTransform.CompareTag("SlotVertical"))
+            {
+                Slot slot = childTransform.GetComponent<Slot>();
+                verticalSlots.Add(slot);
+            }
+            else if(childTransform.CompareTag("SlotHorizontal"))
+            {
+                Slot slot = childTransform.GetComponent<Slot>();
+                horizontalSlots.Add(slot);
+            }
+        }
     }
 
     public void setDebugToColor(string type)
@@ -72,24 +88,24 @@ public class Tile : MonoBehaviour
     {
         for(int i = 0; i < TOTAL_SLOTS; i++)
         {
-            if(verticalSlots[i] == 2) 
+            if(verticalSlotsStates[i] == 2) 
             {
                 updateChildren("v_", i);
             }
 
-            if(horizontalSlots[i] == 1 || horizontalSlots[i] == 3) 
+            if(horizontalSlotsStates[i] == 1 || horizontalSlotsStates[i] == 3) 
             {
                 updateChildren("h_", i);
             }
         }
 
-        if(horizontalSlots[0] == 3)
+        if(horizontalSlotsStates[0] == 3)
         {
             updateChildren("v_", 0);
         }
     }
 
-    void updateChildren(string ob_child_name, int pos)
+    public void updateChildren(string ob_child_name, int pos)
     {
         Slot slot = transform.Find(ob_child_name + pos).GetComponent<Slot>();
         if(slot) 
@@ -136,10 +152,17 @@ public class Tile : MonoBehaviour
     //if one of the slots is different than 0 it means it's empty
     public bool isFilled()
     {
-        bool isFilled = CheckSlots(horizontalSlots);
+        bool isFilled = CheckSlots(horizontalSlotsStates);
         if(!isFilled) return isFilled;
-        isFilled = CheckSlots(verticalSlots);
+        isFilled = CheckSlots(verticalSlotsStates);
         return isFilled;
+    }
+
+    public bool isEmptyInDirection(bool isVertical)
+    {
+        int[] slots = isVertical ? verticalSlotsStates : horizontalSlotsStates;
+        bool isFilled = CheckSlots(slots);
+        return !isFilled;
     }
 
     private bool CheckSlots(int[] slots)
@@ -152,6 +175,17 @@ public class Tile : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void UpdateSlotState(int slotPos, int state)
+    {
+        verticalSlotsStates[slotPos] = 1;
+        levelManager.UpdateTileState(this);
+    }
+
+    public Slot GetSlot(int pos, bool isVertical)
+    {
+        return isVertical ? verticalSlots[pos] : horizontalSlots[pos];
     }
 
 }

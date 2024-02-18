@@ -19,4 +19,9 @@ public class Utils : MonoBehaviour
                 return Direction.North;
         }
     }
+
+    public bool IsVerticalAxis (Direction currentDirection)
+    {
+        return currentDirection == Direction.North || currentDirection == Direction.South;
+    }
 }

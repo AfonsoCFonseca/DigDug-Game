@@ -169,4 +169,11 @@ public class LevelManager : MonoBehaviour
 
         return false;
     }
+
+    public void UpdateTileState(Tile currentTile)
+    {
+        int mapX = currentTile.getMapTilePosition().mapX;
+        int mapY = currentTile.getMapTilePosition().mapY;
+        mapArray[mapY, mapX] = currentTile;
+    }
 }

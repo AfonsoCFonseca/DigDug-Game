@@ -12,6 +12,8 @@ public class Slot : MonoBehaviour
     [SerializeField] private Sprite normalSlot;
     [SerializeField] private Sprite endSlot;
 
+    bool isEndSlot = false;
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -21,18 +23,27 @@ public class Slot : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.enabled = true;
+        isEndSlot = false;
         spriteRenderer.sprite = normalSlot;
+        GetParentTile().UpdateSlotState(getSlotPositionInTile(), IsVertical() ? 2 : 1); // set to 1 endless horizontal
     }
 
     public void SwitchToEndSlot(bool isLeftSide)
     {
-        if(isLeftSide)
+        Vector3 scale = spriteRenderer.transform.localScale;
+        Debug.Log("switch");
+        if(isLeftSide && scale.x > 0)
         {
-            Vector3 scale = spriteRenderer.transform.localScale;
             scale.x *= -1;
             spriteRenderer.transform.localScale = scale;
         }
+        isEndSlot = true;
         spriteRenderer.sprite = endSlot;
+    }
+
+    public bool IsEndSlot()
+    {
+        return isEndSlot;
     }
 
     public int getSlotPositionInTile()
@@ -49,6 +60,11 @@ public class Slot : MonoBehaviour
             Debug.LogError("Failed to extract part after underscore from the name: " + goName);
             return 0;
         }
+    }
+
+    public Tile GetParentTile()
+    {
+        return transform.parent.GetComponent<Tile>();;
     }
 
     public bool IsVertical()

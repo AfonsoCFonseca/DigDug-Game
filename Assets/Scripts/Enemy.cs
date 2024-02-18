@@ -108,17 +108,12 @@ public class Enemy : MonoBehaviour
         List<Direction> possibleDirections = new List<Direction>();
         foreach (Direction direction in allDirections)
         {
-            Tile possibleNeighbourTile = levelManager.GetNeighbourTile(currentTile, direction);
-            
+            Tile neighbourTile = levelManager.GetNeighbourTile(currentTile, direction);
             bool isVertical = utils.IsVerticalAxis(direction);
 
-
-            if(possibleNeighbourTile && !possibleNeighbourTile.isFilled() && 
-                !(direction == Direction.West && currentTile.GetSlot(0, isVertical).IsEndSlot()) && 
-                !(direction == Direction.East && currentTile.GetSlot(3, isVertical).IsEndSlot()) && 
-                !(direction == Direction.South && currentTile.GetSlot(3, isVertical).IsEndSlot()) && 
-                !(direction == Direction.North && currentTile.GetSlot(0, isVertical).IsEndSlot()) 
-                ) {
+            // if(transform.gameObject.name == "Fygars(Clone)")
+            if(isTileValidForMoving(direction, isVertical, neighbourTile)) 
+            {
                 possibleDirections.Add(direction);
             }
         }
@@ -129,6 +124,7 @@ public class Enemy : MonoBehaviour
     //to the current Direction
     private Direction PickOneOfTheDirections(List<Direction> possibleDirections)
     {
+        Debug.Log(possibleDirections.Count);
         if(possibleDirections.Count > 1) {
             Direction specificDirection = possibleDirections.Find(
                 dir => dir == utils.GetOppositeDirection(currentDirection));
@@ -141,6 +137,30 @@ public class Enemy : MonoBehaviour
 
         int randomIndex = UnityEngine.Random.Range(0, possibleDirections.Count);
         return possibleDirections[randomIndex];
+    }
+
+    private bool isTileValidForMoving(Direction dir, bool isVertical, Tile neighbourTile)
+    {
+        //Check if the current tile and next tile match the slot state, validating if the slots are linked
+        if (neighbourTile) 
+        {
+            // Define constants or variables for slot indices
+            int currentSlotIndex = (dir == Direction.South || dir == Direction.East) ? 3 : 0;
+            int neighborSlotIndex = (dir == Direction.South || dir == Direction.East) ? 0 : 3;
+
+            bool isVerticalDirection = utils.IsVerticalAxis(dir);
+            // Extracted common logic
+            bool currentSlotActive = currentTile.GetSlot(currentSlotIndex, isVerticalDirection).isRendererActive();
+            bool neighborSlotActive = neighbourTile.GetSlot(neighborSlotIndex, isVerticalDirection).isRendererActive();
+
+            // Simplified condition checks
+            if (!currentSlotActive || !neighborSlotActive)
+            {
+                return false;
+            }
+        }
+
+        return neighbourTile && !neighbourTile.isFilled();
     }
 
     private void RotateSprite(Direction dir)

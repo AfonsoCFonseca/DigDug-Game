@@ -92,8 +92,7 @@ public class Tile : MonoBehaviour
             {
                 updateChildren("v_", i);
             }
-
-            if(horizontalSlotsStates[i] == 1 || horizontalSlotsStates[i] == 3) 
+            else if(horizontalSlotsStates[i] == 1 || horizontalSlotsStates[i] == 3) 
             {
                 updateChildren("h_", i);
             }

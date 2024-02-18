@@ -31,7 +31,6 @@ public class Slot : MonoBehaviour
     public void SwitchToEndSlot(bool isLeftSide)
     {
         Vector3 scale = spriteRenderer.transform.localScale;
-        Debug.Log("switch");
         if(isLeftSide && scale.x > 0)
         {
             scale.x *= -1;
@@ -81,5 +80,10 @@ public class Slot : MonoBehaviour
             Debug.LogError("Failed to extract part after underscore from the name: " + goName);
             return false;
         }
+    }
+
+    public bool isRendererActive()
+    {
+        return spriteRenderer.enabled;
     }
 }

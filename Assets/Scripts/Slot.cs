@@ -14,14 +14,14 @@ public class Slot : MonoBehaviour
 
     bool isEndSlot = false;
 
-    void Start()
+    void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void SetToDigged()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        // spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.enabled = true;
         isEndSlot = false;
         spriteRenderer.sprite = normalSlot;
@@ -30,6 +30,8 @@ public class Slot : MonoBehaviour
 
     public void SwitchToEndSlot(bool isLeftSide)
     {
+        // spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = true;
         Vector3 scale = spriteRenderer.transform.localScale;
         if(isLeftSide && scale.x > 0)
         {

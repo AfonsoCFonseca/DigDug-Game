@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Utils : MonoBehaviour
 {
+    int currentColorDebugIndex = 0;
+
     public Direction GetOppositeDirection(Direction dir) {
         switch (dir)
         {
@@ -23,5 +25,12 @@ public class Utils : MonoBehaviour
     public bool IsVerticalAxis (Direction currentDirection)
     {
         return currentDirection == Direction.North || currentDirection == Direction.South;
+    }
+
+    public void DrawRandColorDebug(Tile ct)
+    {
+        string[] allDebugColors = new string[4] {"default", "target", "debug", "debug1"};
+        if(currentColorDebugIndex >= 4) currentColorDebugIndex = 0;
+        ct.setDebugToColor(allDebugColors[currentColorDebugIndex++]);
     }
 }

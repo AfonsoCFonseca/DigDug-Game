@@ -28,6 +28,8 @@ public class Enemy : MonoBehaviour
     private bool canGetNewNeighbour = true;
     [SerializeField] private float speed = 6.0f;
 
+    List<string> idTilesSinceLastTurningpoint = new List<string>();
+    List<string> blackList = new List<string>();
 
     void Start()
     {
@@ -52,7 +54,8 @@ public class Enemy : MonoBehaviour
                 Chase();
                 break;
             case Phase.Moving:
-                Move();
+                if(transform.gameObject.name == "Fygars(Clone)")
+                    Move();
                 break;
             case Phase.Inflated:
                 break;
@@ -64,11 +67,22 @@ public class Enemy : MonoBehaviour
         currentTile = levelManager.GetCurrentTile(transform.position);
         animator.SetBool("isRunning", true);
 
-        //calculates if the player it's near the currentTile and near the neighbour tile
         float distanceToTarget = Vector2.Distance(transform.position, currentTile.transform.position);
-        if(distanceToTarget <= 0.1f && canGetNewNeighbour) //if yes, gets new neighbour tile
-        {
-            neighbourTile = GetNewNeighbour();
+
+        if(canGetNewNeighbour)
+        {   
+            idTilesSinceLastTurningpoint = new List<string>();
+            blackList = new List<string>();
+            Tile isPlayerTile = playerPathfinder1();
+            if(isPlayerTile != null)
+            {
+                neighbourTile = isPlayerTile;
+                canGetNewNeighbour = false;
+            }
+            else if(distanceToTarget <= 0.1f)
+            {
+                neighbourTile = GetNewNeighbour();
+            }
         }
 
         MoveTransistion(); //makes movement transition
@@ -80,12 +94,59 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private Tile playerPathfinder1() 
+    {
+        Tile currentPossibleTile = currentTile;
+        Direction currentPossibleDirection = currentDirection;
+        Tile lastTurningPoint = null;
+        Tile playerTile = null;
+        Tile firstTile = null;
+        List<Tile> path = new List<Tile>();
+
+        for (int i = 0; i < 1000; i++)
+        {
+            List<Direction> possibleDirections = GetAllPossibleDirections(currentPossibleTile, blackList);
+            if (possibleDirections.Count > 2) {
+                idTilesSinceLastTurningpoint = new List<string>();
+                lastTurningPoint = currentPossibleTile;
+            } 
+
+            if (possibleDirections.Count <= 1) {
+                blackList.AddRange(idTilesSinceLastTurningpoint);
+                idTilesSinceLastTurningpoint = new List<string>();
+                if(lastTurningPoint) {
+                    currentPossibleTile = currentTile;
+                    currentPossibleDirection = currentDirection;
+                    lastTurningPoint = null;
+                    playerTile = null;
+                    firstTile = null;
+                    path = new List<Tile>();
+                    continue;
+                } else {
+                    return null;
+                } 
+            }
+            Direction newDirection = PickOneOfTheDirections(possibleDirections, currentPossibleDirection);
+            Tile nt = levelManager.GetNeighbourTile(currentPossibleTile, newDirection);
+
+            path.Add(nt);
+            if(nt.getId() == playerController.getCurrentTile().getId())
+            {
+                firstTile = path[0];
+                return path[0];
+            }
+            idTilesSinceLastTurningpoint.Add(nt.getId());
+            currentPossibleTile = nt;
+            currentPossibleDirection = newDirection;
+        }
+        return firstTile;
+    }
+
     private Tile GetNewNeighbour()
     {
         Tile currentNewNeighbourTile;
-        // if (neighbourTile != null) neighbourTile.setDebugToColor("default");
-        List<Direction> possibleDirections = GetAllPossibleDirections();
-        currentDirection = PickOneOfTheDirections(possibleDirections);
+        List<Direction> possibleDirections = GetAllPossibleDirections(currentTile);
+        currentDirection = PickOneOfTheDirections(possibleDirections, currentDirection);
         RotateSprite(currentDirection);
         currentNewNeighbourTile = levelManager.GetNeighbourTile(currentTile, currentDirection);
 
@@ -102,17 +163,17 @@ public class Enemy : MonoBehaviour
     }
     
     //Get all directions in an array according with the current Tile where you are
-    private List<Direction> GetAllPossibleDirections()
+    private List<Direction> GetAllPossibleDirections(Tile currentPossibleTile, List<string> blackList = null)
     {
         Direction[] allDirections = (Direction[])Enum.GetValues(typeof(Direction));
         List<Direction> possibleDirections = new List<Direction>();
         foreach (Direction direction in allDirections)
         {
-            Tile neighbourTile = levelManager.GetNeighbourTile(currentTile, direction);
+            Tile neighbourTile = levelManager.GetNeighbourTile(currentPossibleTile, direction);
             bool isVertical = utils.IsVerticalAxis(direction);
 
-            // if(transform.gameObject.name == "Fygars(Clone)")
-            if(isTileValidForMoving(direction, isVertical, neighbourTile)) 
+            if(isTileValidForMoving(direction, isVertical, neighbourTile, currentPossibleTile) &&
+                !isTileAlreadyMarked(currentPossibleTile, direction, blackList)) 
             {
                 possibleDirections.Add(direction);
             }
@@ -120,14 +181,22 @@ public class Enemy : MonoBehaviour
         return possibleDirections;
     }
 
+    private bool isTileAlreadyMarked(Tile currentPossibleTile, Direction dir, List<string> blackList)
+    {
+        if(blackList == null) blackList = new List<string>();
+        Tile tile = levelManager.GetNeighbourTile(currentPossibleTile, dir);
+        // blackList.Contains(tile.getId())
+        return blackList.Contains(tile.getId());
+    }
+    
+
     //Pick one of the positions of the array but if it's bigger than 1 dont pick the oposite
     //to the current Direction
-    private Direction PickOneOfTheDirections(List<Direction> possibleDirections)
+    private Direction PickOneOfTheDirections(List<Direction> possibleDirections, Direction currentPossibleDirection)
     {
-        Debug.Log(possibleDirections.Count);
         if(possibleDirections.Count > 1) {
             Direction specificDirection = possibleDirections.Find(
-                dir => dir == utils.GetOppositeDirection(currentDirection));
+                dir => dir == utils.GetOppositeDirection(currentPossibleDirection));
 
             if (possibleDirections.Contains(specificDirection) )
             {
@@ -139,7 +208,8 @@ public class Enemy : MonoBehaviour
         return possibleDirections[randomIndex];
     }
 
-    private bool isTileValidForMoving(Direction dir, bool isVertical, Tile neighbourTile)
+    private bool isTileValidForMoving(Direction dir, bool isVertical, 
+        Tile neighbourTile, Tile currentPossibleTile)
     {
         //Check if the current tile and next tile match the slot state, validating if the slots are linked
         if (neighbourTile) 
@@ -150,7 +220,7 @@ public class Enemy : MonoBehaviour
 
             bool isVerticalDirection = utils.IsVerticalAxis(dir);
             // Extracted common logic
-            bool currentSlotActive = currentTile.GetSlot(currentSlotIndex, isVerticalDirection).isRendererActive();
+            bool currentSlotActive = currentPossibleTile.GetSlot(currentSlotIndex, isVerticalDirection).isRendererActive();
             bool neighborSlotActive = neighbourTile.GetSlot(neighborSlotIndex, isVerticalDirection).isRendererActive();
 
             // Simplified condition checks

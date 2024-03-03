@@ -82,6 +82,8 @@ public class Tile : MonoBehaviour
         if(type == "target") debugFlagRenderer.material.color = targetColor;
         if(type == "debug") debugFlagRenderer.material.color = debugColor;
         if(type == "debug1") debugFlagRenderer.material.color = debugColor1;
+        if(type == "debug1") debugFlagRenderer.material.color = debugColor1;
+        if(type == "off") debugFlag.gameObject.SetActive(false);
     }
 
     void updateTileTextures() 

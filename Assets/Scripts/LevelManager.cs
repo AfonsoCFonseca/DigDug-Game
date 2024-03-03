@@ -45,6 +45,17 @@ public class LevelManager : MonoBehaviour
                 int[] tileSlotsState = readTileFromLevelMap(i, j);
 
                 mapArray[i, j].GetComponent<Tile>().Setup(tileSlotsState, i, j);
+
+                if(i == 1 && j == 11) {
+                    mapArray[i, j].GetSlot(3, true).SwitchToEndSlot(false);
+                }
+                if(i == 4 && j == 11) {
+                    mapArray[i, j].GetSlot(0, true).SwitchToEndSlot(true);
+                    mapArray[i, j].GetSlot(3, true).SwitchToEndSlot(false);
+                }
+                if(i == 6 && j == 11) {
+                    mapArray[i, j].GetSlot(0, true).SwitchToEndSlot(true);
+                }
             }
         }
     }
@@ -100,10 +111,10 @@ public class LevelManager : MonoBehaviour
         return currentTile;
     }
 
-    public Tile GetNeighbourTile(Tile currentTile, Direction direction)
+    public Tile GetNeighbourTile(Tile tCurrentTile, Direction direction)
     {
-        int mapX = currentTile.getMapTilePosition().mapX;
-        int mapY = currentTile.getMapTilePosition().mapY;
+        int mapX = tCurrentTile.getMapTilePosition().mapX;
+        int mapY = tCurrentTile.getMapTilePosition().mapY;
 
         if (!isBoardLimit(mapX, mapY, direction)){
             return null;

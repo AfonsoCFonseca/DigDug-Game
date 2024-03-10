@@ -26,15 +26,25 @@ public class Tile : MonoBehaviour
     public Color debugColor1 = Color.yellow;
     public Color defaultColor = Color.red;
 
+    [SerializeField]
+    private TextMesh textMesh;
+
     void Awake()
     {
         id = GenerateID(10);
+
         debugFlag = transform.Find(DEBUG_OBJ_NAME);
         debugFlagRenderer = debugFlag.GetComponent<Renderer>();
         debugFlagRenderer.material.color = defaultColor;
 
         GameObject gameManager = GameObject.FindGameObjectsWithTag("GameManager")[0];
         levelManager = gameManager.GetComponent<LevelManager>();
+    }
+
+    void Start()
+    {
+        textMesh.text = id.Substring(0, 5);
+        textMesh.transform.position = transform.position;
     }
 
     public void Setup(int[] slots, int mapY, int mapX)
@@ -81,7 +91,6 @@ public class Tile : MonoBehaviour
         if(type == "default") debugFlagRenderer.material.color = defaultColor;
         if(type == "target") debugFlagRenderer.material.color = targetColor;
         if(type == "debug") debugFlagRenderer.material.color = debugColor;
-        if(type == "debug1") debugFlagRenderer.material.color = debugColor1;
         if(type == "debug1") debugFlagRenderer.material.color = debugColor1;
         if(type == "off") debugFlag.gameObject.SetActive(false);
     }

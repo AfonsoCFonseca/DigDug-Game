@@ -84,7 +84,7 @@ public class LevelManager : MonoBehaviour
         return axisArrayState;
     }
 
-    private Tile GetCurrentTileByArrayPosition(int posX, int posY)
+    public Tile GetCurrentTileByArrayPosition(int posX, int posY)
     {
         return mapArray[posY, posX];
     }

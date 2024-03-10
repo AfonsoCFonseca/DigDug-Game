@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Excavator : MonoBehaviour
 {
-    private bool isMovingHorizontally = true;
-
     public event System.Action<Collider2D> ExcavatorOnTriggerEnter;
     public event System.Action<Collider2D> ExcavatorOnTriggerExit;
 

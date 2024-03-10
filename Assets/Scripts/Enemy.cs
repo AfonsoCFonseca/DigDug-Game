@@ -31,6 +31,9 @@ public class Enemy : MonoBehaviour
     List<string> idTilesSinceLastTurningpoint = new List<string>();
     List<string> blackList = new List<string>();
 
+    Tile currentPossibleTile;
+    Direction currentPossibleDirection;
+
     void Start()
     {
         pookasSprite = transform.Find("Sprite");
@@ -43,7 +46,14 @@ public class Enemy : MonoBehaviour
         utils = levelManager.GetComponent<Utils>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
 
+        currentTile = levelManager.GetCurrentTile(transform.position);
+        List<Direction> possibleDirections = GetAllPossibleDirections(currentTile);
+        int randomIndex = UnityEngine.Random.Range(0, possibleDirections.Count);
+        currentDirection = Direction.North; //possibleDirections[randomIndex]
         currentPhase = Phase.Moving;
+
+        currentPossibleTile = currentTile;
+        currentPossibleDirection = currentDirection;
     }
 
     void Update()
@@ -73,14 +83,15 @@ public class Enemy : MonoBehaviour
         {   
             idTilesSinceLastTurningpoint = new List<string>();
             blackList = new List<string>();
-            Tile isPlayerTile = playerPathfinder1();
+            Tile isPlayerTile = pathFinderPlayer();
             if(isPlayerTile != null)
             {
                 neighbourTile = isPlayerTile;
                 canGetNewNeighbour = false;
-            }
-            else if(distanceToTarget <= 0.1f)
+            } 
+            else 
             {
+                Debug.Log("none");
                 neighbourTile = GetNewNeighbour();
             }
         }
@@ -94,53 +105,44 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private Tile playerPathfinder1() 
+    private Tile pathFinderPlayer()
     {
-        Tile currentPossibleTile = currentTile;
-        Direction currentPossibleDirection = currentDirection;
-        Tile lastTurningPoint = null;
-        Tile playerTile = null;
-        Tile firstTile = null;
         List<Tile> path = new List<Tile>();
-
-        for (int i = 0; i < 1000; i++)
+        List<Direction> pathDirection = new List<Direction>();
+        blackList = new List<string>();
+        for(int i = 0; i < 14 * 14; i++)
         {
             List<Direction> possibleDirections = GetAllPossibleDirections(currentPossibleTile, blackList);
-            if (possibleDirections.Count > 2) {
-                idTilesSinceLastTurningpoint = new List<string>();
-                lastTurningPoint = currentPossibleTile;
-            } 
-
-            if (possibleDirections.Count <= 1) {
-                blackList.AddRange(idTilesSinceLastTurningpoint);
-                idTilesSinceLastTurningpoint = new List<string>();
-                if(lastTurningPoint) {
-                    currentPossibleTile = currentTile;
-                    currentPossibleDirection = currentDirection;
-                    lastTurningPoint = null;
-                    playerTile = null;
-                    firstTile = null;
-                    path = new List<Tile>();
-                    continue;
-                } else {
-                    return null;
-                } 
-            }
             Direction newDirection = PickOneOfTheDirections(possibleDirections, currentPossibleDirection);
-            Tile nt = levelManager.GetNeighbourTile(currentPossibleTile, newDirection);
 
+            Tile nt = levelManager.GetNeighbourTile(currentPossibleTile, newDirection);
             path.Add(nt);
-            if(nt.getId() == playerController.getCurrentTile().getId())
-            {
-                firstTile = path[0];
-                return path[0];
-            }
-            idTilesSinceLastTurningpoint.Add(nt.getId());
+            pathDirection.Add(newDirection);
             currentPossibleTile = nt;
             currentPossibleDirection = newDirection;
+
+            if(isTilePlayerTile(nt))
+            {
+                currentDirection = pathDirection[0];
+                RotateSprite(currentDirection);
+                return path[0];
+            }
+
+            if(possibleDirections.Count >= 2) { // can go besides backwards and forwards
+                blackList.Add(nt.getId());
+            }
+
+            if(GetAllPossibleDirections(nt).Count == 1) { // can only go backwards
+                currentPossibleTile = currentTile;
+                currentPossibleDirection = currentDirection;
+                path = new List<Tile>();
+                pathDirection = new List<Direction>();
+                continue;
+            }
         }
-        return firstTile;
+        return null;
     }
+    
 
     private Tile GetNewNeighbour()
     {
@@ -173,11 +175,12 @@ public class Enemy : MonoBehaviour
             bool isVertical = utils.IsVerticalAxis(direction);
 
             if(isTileValidForMoving(direction, isVertical, neighbourTile, currentPossibleTile) &&
-                !isTileAlreadyMarked(currentPossibleTile, direction, blackList)) 
+                !isTileAlreadyMarked(currentPossibleTile, direction, blackList))
             {
                 possibleDirections.Add(direction);
             }
         }
+
         return possibleDirections;
     }
 
@@ -242,5 +245,11 @@ public class Enemy : MonoBehaviour
     private void Chase()
     {
         animator.SetBool("isChasing", true);
+    }
+
+    private bool isTilePlayerTile(Tile nt)
+    {
+        return nt.getId() == playerController.getCurrentTile().getId() || 
+            nt.getId() == playerController.getPreviousTile().getId();
     }
 }

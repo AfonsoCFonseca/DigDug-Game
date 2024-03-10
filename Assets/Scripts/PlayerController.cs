@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     Direction previousDirection;
 
     private Tile currentTile;
+    private Tile previousTile;
     private Tile currentNeighbourTile;
 
     private Excavator excavatorCollider;
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
+        
         KeyMovement();
     }
 
@@ -105,6 +107,7 @@ public class PlayerController : MonoBehaviour
 
         if(isPossibleNewNeighbourTile(requestedDirection, neighbourTile))
         {
+            previousTile = currentTile;
             previousDirection = currentDirection;
             currentDirection = requestedDirection;
             UpdatesPlayerRotation(currentDirection);
@@ -144,6 +147,7 @@ public class PlayerController : MonoBehaviour
     private void SetPlayerToStartingPosition()
     {
         currentTile = levelManager.GetCurrentTile(gameValues.STARTING_TILE_POSITION);
+        previousTile = currentTile;
         Vector2 tilePos = currentTile.transform.position;
         tilePos.x += 2.5f; //half images height
         tilePos.x -= 2.44f; //half images width
@@ -195,5 +199,10 @@ public class PlayerController : MonoBehaviour
     public Tile getCurrentTile()
     {
         return currentTile;
+    }
+
+    public Tile getPreviousTile()
+    {
+        return previousTile;
     }
 }

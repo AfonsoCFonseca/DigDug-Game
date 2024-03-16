@@ -33,4 +33,14 @@ public class Utils : MonoBehaviour
         if(currentColorDebugIndex >= 4) currentColorDebugIndex = 0;
         ct.setDebugToColor(allDebugColors[currentColorDebugIndex++]);
     }
+
+    public void clearDebugBlocksFromMap(LevelManager lm)
+    {
+        for(int i = 0; i < 14; i++)
+        {
+            for(int j = 0; j < 14; j++) {
+                lm.GetCurrentTileByArrayPosition(i, j).setDebugToColor("off");
+            }
+        }
+    }
 }

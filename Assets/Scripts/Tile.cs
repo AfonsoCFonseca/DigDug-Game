@@ -43,8 +43,8 @@ public class Tile : MonoBehaviour
 
     void Start()
     {
-        textMesh.text = id.Substring(0, 5);
-        textMesh.transform.position = transform.position;
+        // textMesh.text = id.Substring(0, 5);
+        // textMesh.transform.position = transform.position;
     }
 
     public void Setup(int[] slots, int mapY, int mapX)

@@ -54,9 +54,15 @@ Before initiating the Chase Mode for the enemies, I first had to refine the digg
 The same approach was implemented during gameplay when the player begins to dig and changes direction. At this point, the code became challenging to comprehend, prompting me to perform some refactoring and address a few bugs.
 
 <div align="center">
+   <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/draft_3.png'>
    <img width="200" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_4.png'>
 </div>
 
+I spent approximately four weekends developing the Enemy pathfinder from scratch. I couldn't remember how I had implemented it for the Pacman game (https://github.com/AfonsoCFonseca/Pacman-Game), but despite having a potential solution in that repository, I decided not to reference it or implement a pathfinding algorithm like A*. Instead, I tried to come up with my own idea.
+
+Before moving, the Enemy checks every free neighboring tile around it and chooses one direction. From there, it checks the next possible free tile on that current neighboring tile and randomly selects one, setting a direction. This process continues until one of three things happens: it reaches a dead end, finds the player, or neither of the previous options occur.
+
+If a dead end is reached, the validation returns to the current enemy position and restarts the pathfinding process(I could have implemented a blacklist for the already investigated paths to improve the algorithm's performance, but I was already tired of this development). If the player is found, the pathfinding process immediately stops and returns the first position of the array that has the path to the player to become the next tile to move to. If neither of these options is met, it will randomly pick one of the available directions to move next.
 
 # Future Implementation
 

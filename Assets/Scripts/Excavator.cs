@@ -16,10 +16,7 @@ public class Excavator : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D otherCollider)
     {
-        if (isCollidingWithSlot(otherCollider))
-        {
-            ExcavatorOnTriggerEnter?.Invoke(otherCollider);
-        }
+        ExcavatorOnTriggerEnter?.Invoke(otherCollider);
     }
 
     private void OnTriggerExit2D(Collider2D otherCollider) {
@@ -33,11 +30,5 @@ public class Excavator : MonoBehaviour
                 ExcavatorOnTriggerExit?.Invoke(otherCollider);
             }
         }
-    }
-
-    private bool isCollidingWithSlot(Collider2D otherCollider)
-    {
-        return (playerController.isMovingHorizontally && otherCollider.CompareTag("SlotHorizontal") 
-        || !playerController.isMovingHorizontally && otherCollider.CompareTag("SlotVertical"));
     }
 }

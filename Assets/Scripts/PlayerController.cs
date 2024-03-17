@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     private Transform excavatorTransform;
     public bool isMovingHorizontally = true;
 
+    private bool isMoving = false;
+
+
     void Start()
     {
         playerSprite = transform.Find("Sprite");
@@ -54,7 +57,6 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || 
             Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)) 
         {
-            animator.SetBool("isRunning", true);
             Tile newCurrentTile = levelManager.GetCurrentTile(transform.position);
             if (newCurrentTile != null && newCurrentTile.getId() != currentTile.getId())
             {
@@ -64,25 +66,29 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetKey(KeyCode.LeftArrow))
         {
+            isMoving = true;
             MovePlayer(Direction.West);
         }
         else if(Input.GetKey(KeyCode.RightArrow))
         {
+            isMoving = true;
             MovePlayer(Direction.East);
         }
         else if(Input.GetKey(KeyCode.UpArrow))
         {
+            isMoving = true;
             MovePlayer(Direction.North);
         }
         else if(Input.GetKey(KeyCode.DownArrow))
         {
+            isMoving = true;
             MovePlayer(Direction.South);
         }
         else {
             animator.SetBool("isRunning", false);
+            animator.SetBool("isDigging", false);
+            isMoving = false;
         }
-
-
     }
 
     private void MovePlayer(Direction requestedDirection)
@@ -170,8 +176,11 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDigCollision(Collider2D otherCollider)
     {
-        Slot slot = otherCollider.GetComponent<Slot>();
-        slot.SetToDigged();
+        if (isCollidingWithSlot(otherCollider)){
+            MovementAnimationPlayer(otherCollider);
+            Slot slot = otherCollider.GetComponent<Slot>();
+            slot.SetToDigged();
+        }
     }
 
     private void HandleDigExit(Collider2D otherCollider)
@@ -181,7 +190,7 @@ public class PlayerController : MonoBehaviour
         bool isSlotZeroPosition = slotPosition == 0;
 
         Tile neighbourTile = levelManager.GetNeighbourTile(slot.GetParentTile(), previousDirection);
-        bool isNeighbourFill = neighbourTile.isFilled();
+        bool isNeighbourFill = neighbourTile && neighbourTile.isFilled();
         bool isPlayerMovingVertically = utils.IsVerticalAxis(currentDirection);
         bool isLastSlotEndTile = slot.IsEndSlot();
         bool isSlotInVerticalPosition = slot.IsVertical();
@@ -195,6 +204,23 @@ public class PlayerController : MonoBehaviour
             slot.SwitchToEndSlot(isSlotZeroPosition);
         }
     }
+
+    private void MovementAnimationPlayer(Collider2D otherCollider)
+    {
+        if (isMoving)
+        {
+            bool isRendererEnable = otherCollider.GetComponent<SpriteRenderer>().enabled == false;
+            animator.SetBool("isRunning", !isRendererEnable);
+            animator.SetBool("isDigging", isRendererEnable);
+        }
+    }
+
+    private bool isCollidingWithSlot(Collider2D otherCollider)
+    {
+        return ((isMovingHorizontally && otherCollider.CompareTag("SlotHorizontal") 
+        || !isMovingHorizontally && otherCollider.CompareTag("SlotVertical")));
+    }
+
 
     public Tile getCurrentTile()
     {

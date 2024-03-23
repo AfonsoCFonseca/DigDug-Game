@@ -48,7 +48,6 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        
         KeyMovement();
     }
 
@@ -83,6 +82,10 @@ public class PlayerController : MonoBehaviour
         {
             isMoving = true;
             MovePlayer(Direction.South);
+        }
+        else if(Input.GetKeyDown(KeyCode.R))
+        {
+            levelManager.RestartGame();
         }
         else {
             animator.SetBool("isRunning", false);
@@ -230,5 +233,13 @@ public class PlayerController : MonoBehaviour
     public Tile getPreviousTile()
     {
         return previousTile;
+    }
+
+    public void RestartPlayer()
+    {
+        SetPlayerToStartingPosition();
+        Tile currentTile = levelManager.GetCurrentTile(gameValues.STARTING_TILE_POSITION);
+        Tile neighbourTile = levelManager.GetNeighbourTile(currentTile, Direction.East);
+        SetPlayerStartingRotationAndDirection(Direction.East, neighbourTile);
     }
 }

@@ -57,4 +57,11 @@ public class LevelMaps : MonoBehaviour
         enemies.Add(pookas);
         enemies.Add(fygars);
     }
+
+    public void Restart()
+    {
+        enemies.Clear();
+        enemyPosition.Clear();
+        Start();
+    }
 }

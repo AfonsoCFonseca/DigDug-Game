@@ -89,4 +89,18 @@ public class UI : MonoBehaviour
             Debug.Log("Game Over");
         }
     }
+
+    public void ShowGameOver()
+    {
+
+    }
+
+    public void RestartGame()
+    {
+        currentLifes = 3;
+        score = 0;
+        scoreTMP.text = score.ToString();
+        life1ValueTransform.gameObject.SetActive(true);
+        life2ValueTransform.gameObject.SetActive(true);
+    }
 }

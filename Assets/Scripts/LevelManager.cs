@@ -14,13 +14,18 @@ public class LevelManager : MonoBehaviour
     public Tile tile;
 
     private Tile[,] mapArray;
+    private List<GameObject> enemyGameObjects = new List<GameObject>();
     private LevelMaps levelMaps;
     private GameValues gameValues;
+    private UI ui;
+    [SerializeField] private PlayerController playerController;
 
     void Start()
     {
         levelMaps = GetComponent<LevelMaps>();
         gameValues = GetComponent<GameValues>();
+        ui = GetComponent<UI>();
+
         populateMap();
     }
 
@@ -62,12 +67,13 @@ public class LevelManager : MonoBehaviour
 
     void enemySpawn()
     {
+        enemyGameObjects = new List<GameObject>();
         for(int i = 0; i < levelMaps.enemyPosition.Count; i++)
         {
             Position pos = levelMaps.enemyPosition[i];
             Tile enemyTile = GetCurrentTileByArrayPosition(pos.x, pos.y);
             Vector2 currentPosition = new Vector2(enemyTile.transform.position.x, enemyTile.transform.position.y);
-            Instantiate(levelMaps.enemies[i], currentPosition, Quaternion.identity);
+            enemyGameObjects.Add(Instantiate(levelMaps.enemies[i], currentPosition, Quaternion.identity));
         }
     }
 
@@ -186,5 +192,42 @@ public class LevelManager : MonoBehaviour
         int mapX = currentTile.getMapTilePosition().mapX;
         int mapY = currentTile.getMapTilePosition().mapY;
         mapArray[mapY, mapX] = currentTile;
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("Game Over");
+        ui.ShowGameOver();
+    }
+
+    public void RestartGame()
+    {
+        playerController.RestartPlayer();
+        ClearMap();
+        ClearEnemies();
+        ui.RestartGame();
+        levelMaps.Restart();
+        populateMap();
+    }
+
+    private void ClearMap()
+    {
+        for (int i = 0; i < HEIGHT_MAP_TILES; i++)
+        {
+            for (int j = 0; j < WIDTH_MAP_TILES; j++)
+            {
+                Destroy(mapArray[i, j].gameObject);
+                mapArray[i, j] = null;
+            }
+        }
+    }
+
+    private void ClearEnemies()
+    {
+        for (int i = 0; i < enemyGameObjects.Count; i++)
+        {
+            Destroy(enemyGameObjects[i].gameObject);
+            enemyGameObjects[i] = null;
+        }
     }
 }

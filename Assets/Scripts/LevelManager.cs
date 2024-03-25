@@ -194,18 +194,12 @@ public class LevelManager : MonoBehaviour
         mapArray[mapY, mapX] = currentTile;
     }
 
-    public void GameOver()
-    {
-        Debug.Log("Game Over");
-        ui.ShowGameOver();
-    }
-
     public void RestartGame()
     {
         playerController.RestartPlayer();
         ClearMap();
         ClearEnemies();
-        ui.RestartGame();
+        ui.LooseLife();
         levelMaps.Restart();
         populateMap();
     }

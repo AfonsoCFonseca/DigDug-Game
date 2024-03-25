@@ -7,6 +7,7 @@ TagManager:
   - GameManager
   - SlotVertical
   - SlotHorizontal
+  - Enemy
   layers:
   - Default
   - TransparentFX

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UI : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class UI : MonoBehaviour
 
     Transform life1ValueTransform;
     Transform life2ValueTransform;
+
+    private string GAME_SCENE_NAME = "Menu";
 
     void Start()
     {
@@ -73,7 +76,7 @@ public class UI : MonoBehaviour
         }
     }
 
-    void LooseLife()
+    public void LooseLife()
     {
         currentLifes--;
         if(currentLifes == 2)
@@ -86,7 +89,7 @@ public class UI : MonoBehaviour
         }
         if(currentLifes == 0)
         {
-            Debug.Log("Game Over");
+            SceneManager.LoadScene(GAME_SCENE_NAME);
         }
     }
 

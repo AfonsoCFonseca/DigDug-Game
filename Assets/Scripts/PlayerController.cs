@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private Utils utils;
 
     [SerializeField] private float speed = 8.0f;
-    Direction currentDirection;
+    Direction currentDirection = Direction.East;
     Direction previousDirection;
 
     private Tile currentTile;
@@ -22,9 +22,14 @@ public class PlayerController : MonoBehaviour
     private Excavator excavatorCollider;
     private Transform excavatorTransform;
     public bool isMovingHorizontally = true;
-
     private bool isMoving = false;
 
+    [SerializeField] private GameObject rope_attack;
+    private bool isAttacking = false;
+    private float attackTimer = 0f;
+    private float TIMER_ANIMATION_ATTACK = 0.3f;
+    private float ATTACK_MOVING_SPEED = 50f;
+    private GameObject ropeAttackInstance = null;
 
     void Start()
     {
@@ -49,6 +54,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         KeyMovement();
+
+        if (isAttacking)
+        {
+            AttackTimerAndAnimation();
+        }
     }
 
     void KeyMovement()
@@ -83,9 +93,9 @@ public class PlayerController : MonoBehaviour
             isMoving = true;
             MovePlayer(Direction.South);
         }
-        else if(Input.GetKeyDown(KeyCode.R))
+        else if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Z))
         {
-            levelManager.RestartGame();
+            Attack();
         }
         else {
             animator.SetBool("isRunning", false);
@@ -224,6 +234,75 @@ public class PlayerController : MonoBehaviour
         || !isMovingHorizontally && otherCollider.CompareTag("SlotVertical")));
     }
 
+    private void Attack()
+    {
+        if(isAttacking == true) return;
+
+        Vector2 ropeInitialPosition = new Vector3(transform.position.x + 6.3f, transform.position.y + -2.66f, -1);
+        Quaternion quart = Quaternion.identity;
+        switch(currentDirection) {
+            case Direction.West:
+                ropeInitialPosition = new Vector3(transform.position.x + 1.17f, transform.position.y + -2.66f, -1);
+                quart = Quaternion.Euler(0, 0, 180);
+                break;
+            case Direction.North:
+                ropeInitialPosition = new Vector3(transform.position.x + 2.51f, transform.position.y + 1.53f, -1);
+                quart = Quaternion.Euler(0, 0, 90);
+                break;
+            case Direction.South:
+                ropeInitialPosition = new Vector3(transform.position.x + 2.61f, transform.position.y + -6.19f, -1);
+                quart = Quaternion.Euler(0, 0, -90);
+                break;
+        }
+
+        ropeAttackInstance = Instantiate(rope_attack, ropeInitialPosition, quart);
+        ropeAttackInstance.transform.SetParent(this.transform);
+        //set the z to be above the rest of the game
+        ropeAttackInstance.transform.position = new Vector3(ropeAttackInstance.transform.position.x, 
+            ropeAttackInstance.transform.position.y, ropeAttackInstance.transform.position.z - 1);
+
+        isAttacking = true;
+    }
+
+    private void AttackTimerAndAnimation()
+    {
+        if(ropeAttackInstance)
+        {
+            Rope ropeAttack = ropeAttackInstance.GetComponent<Rope>();
+            if (ropeAttack != null)
+            {
+                ropeAttack.RopeOnTriggerEnter += RopeCollision;
+            }
+            Vector2 direction = new Vector2(1, 0);
+            Vector2 translation = direction.normalized * ATTACK_MOVING_SPEED * Time.deltaTime;
+            ropeAttackInstance.transform.Translate(translation);
+        }
+
+        attackTimer += Time.deltaTime;
+        if (attackTimer >= TIMER_ANIMATION_ATTACK) 
+        {
+            isAttacking = false;
+            DestroyRopeAttack();
+            attackTimer = 0f;
+        }
+    }
+
+    private void DestroyRopeAttack()
+    {
+        if(ropeAttackInstance)
+        {
+            Destroy(ropeAttackInstance);
+            ropeAttackInstance = null;
+        }
+    }
+
+    private void RopeCollision(Collider2D otherCollider)
+    {
+        if (otherCollider.CompareTag("Enemy"))
+        {
+            Destroy(otherCollider.gameObject);
+        }
+    }
 
     public Tile getCurrentTile()
     {
@@ -241,5 +320,13 @@ public class PlayerController : MonoBehaviour
         Tile currentTile = levelManager.GetCurrentTile(gameValues.STARTING_TILE_POSITION);
         Tile neighbourTile = levelManager.GetNeighbourTile(currentTile, Direction.East);
         SetPlayerStartingRotationAndDirection(Direction.East, neighbourTile);
+    }
+
+    private void OnTriggerEnter2D(Collider2D otherCollider)
+    {
+        if(otherCollider.tag == "Enemy")
+        {
+            levelManager.RestartGame();
+        }
     }
 }

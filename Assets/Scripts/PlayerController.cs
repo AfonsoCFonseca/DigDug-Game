@@ -237,26 +237,26 @@ public class PlayerController : MonoBehaviour
     private void Attack()
     {
         if(isAttacking == true) return;
-
-        Vector2 ropeInitialPosition = new Vector3(transform.position.x + 6.3f, transform.position.y + -2.66f, -1);
+        Vector2 ropeInitialPosition = new Vector3(transform.position.x + 7.5f, transform.position.y + -2.66f, -1);
         Quaternion quart = Quaternion.identity;
         switch(currentDirection) {
             case Direction.West:
-                ropeInitialPosition = new Vector3(transform.position.x + 1.17f, transform.position.y + -2.66f, -1);
+                Debug.Log("going here");
+                ropeInitialPosition = new Vector3(transform.position.x - 2.80f, transform.position.y + -2.66f, -1);
                 quart = Quaternion.Euler(0, 0, 180);
                 break;
             case Direction.North:
-                ropeInitialPosition = new Vector3(transform.position.x + 2.51f, transform.position.y + 1.53f, -1);
+                ropeInitialPosition = new Vector3(transform.position.x + 2.43f, transform.position.y + 2.53f, -1);
                 quart = Quaternion.Euler(0, 0, 90);
                 break;
             case Direction.South:
-                ropeInitialPosition = new Vector3(transform.position.x + 2.61f, transform.position.y + -6.19f, -1);
+                ropeInitialPosition = new Vector3(transform.position.x + 2.99f, transform.position.y + -8.19f, -1);
                 quart = Quaternion.Euler(0, 0, -90);
                 break;
         }
 
         ropeAttackInstance = Instantiate(rope_attack, ropeInitialPosition, quart);
-        ropeAttackInstance.transform.SetParent(this.transform);
+        // ropeAttackInstance.transform.SetParent(this.transform);
         //set the z to be above the rest of the game
         ropeAttackInstance.transform.position = new Vector3(ropeAttackInstance.transform.position.x, 
             ropeAttackInstance.transform.position.y, ropeAttackInstance.transform.position.z - 1);
@@ -300,6 +300,7 @@ public class PlayerController : MonoBehaviour
     {
         if (otherCollider.CompareTag("Enemy"))
         {
+            rope_attack.GetComponent<Rope>().RestartState();
             Destroy(otherCollider.gameObject);
         }
     }

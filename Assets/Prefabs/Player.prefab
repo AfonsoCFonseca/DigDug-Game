@@ -228,6 +228,7 @@ MonoBehaviour:
   levelManager: {fileID: 0}
   speed: 6
   isMovingHorizontally: 1
+  rope_attack: {fileID: 488209518567664817, guid: b34996cca7d954027b7d9feabad94be5, type: 3}
 --- !u!50 &1601222800
 Rigidbody2D:
   serializedVersion: 4

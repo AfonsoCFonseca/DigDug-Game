@@ -116,7 +116,6 @@ GameObject:
   m_Component:
   - component: {fileID: 145241851791635382}
   - component: {fileID: 145241851791635379}
-  - component: {fileID: 145241851791635380}
   - component: {fileID: 145241851791635381}
   m_Layer: 0
   m_Name: Fygars
@@ -154,27 +153,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
---- !u!50 &145241851791635380
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 145241851791635383}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!61 &145241851791635381
 BoxCollider2D:
   m_ObjectHideFlags: 0

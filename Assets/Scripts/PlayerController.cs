@@ -237,29 +237,27 @@ public class PlayerController : MonoBehaviour
     private void Attack()
     {
         if(isAttacking == true) return;
-        Vector2 ropeInitialPosition = new Vector3(transform.position.x + 7.5f, transform.position.y + -2.66f, -1);
+        Vector2 ropeInitialPosition = new Vector3(transform.position.x + 7.5f, transform.position.y + -2.66f, 0);
         Quaternion quart = Quaternion.identity;
         switch(currentDirection) {
             case Direction.West:
-                Debug.Log("going here");
-                ropeInitialPosition = new Vector3(transform.position.x - 2.80f, transform.position.y + -2.66f, -1);
+                ropeInitialPosition = new Vector3(transform.position.x - 2.80f, transform.position.y + -2.66f, 0);
                 quart = Quaternion.Euler(0, 0, 180);
                 break;
             case Direction.North:
-                ropeInitialPosition = new Vector3(transform.position.x + 2.43f, transform.position.y + 2.53f, -1);
+                ropeInitialPosition = new Vector3(transform.position.x + 2.43f, transform.position.y + 2.53f, 0);
                 quart = Quaternion.Euler(0, 0, 90);
                 break;
             case Direction.South:
-                ropeInitialPosition = new Vector3(transform.position.x + 2.99f, transform.position.y + -8.19f, -1);
+                ropeInitialPosition = new Vector3(transform.position.x + 2.99f, transform.position.y + -8.19f, 0);
                 quart = Quaternion.Euler(0, 0, -90);
                 break;
         }
 
         ropeAttackInstance = Instantiate(rope_attack, ropeInitialPosition, quart);
-        // ropeAttackInstance.transform.SetParent(this.transform);
         //set the z to be above the rest of the game
         ropeAttackInstance.transform.position = new Vector3(ropeAttackInstance.transform.position.x, 
-            ropeAttackInstance.transform.position.y, ropeAttackInstance.transform.position.z - 1);
+            ropeAttackInstance.transform.position.y, ropeAttackInstance.transform.position.z);
 
         isAttacking = true;
     }
@@ -298,7 +296,30 @@ public class PlayerController : MonoBehaviour
 
     private void RopeCollision(Collider2D otherCollider)
     {
-        if (otherCollider.CompareTag("Enemy"))
+        collideWithEnemy(otherCollider);
+        collidedWithWall(otherCollider);
+    }
+
+    private void collidedWithWall(Collider2D otherCollider)
+    {
+        bool isPlayerMovingVertically = utils.IsVerticalAxis(currentDirection);
+        if(isPlayerMovingVertically && otherCollider.CompareTag("SlotVertical") ||
+            !isPlayerMovingVertically && otherCollider.CompareTag("SlotHorizontal")) 
+        {
+            Tile tile = otherCollider.transform.parent.gameObject.GetComponent<Tile>();
+            if(tile.isEmptyInDirection(false) == true)
+                return;
+            
+            SpriteRenderer sr = otherCollider.GetComponent<SpriteRenderer>();
+            if(sr.enabled == false){
+                Destroy(ropeAttackInstance);
+            }
+        }
+    }
+
+    private void collideWithEnemy(Collider2D otherCollider)
+    {
+       if (otherCollider.CompareTag("Enemy"))
         {
             rope_attack.GetComponent<Rope>().RestartState();
             Destroy(otherCollider.gameObject);

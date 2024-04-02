@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     private float ATTACK_MOVING_SPEED = 50f;
     private GameObject ropeAttackInstance = null;
 
+    private bool isInflating = false;
+
     void Start()
     {
         playerSprite = transform.Find("Sprite");
@@ -273,11 +275,13 @@ public class PlayerController : MonoBehaviour
             }
             Vector2 direction = new Vector2(1, 0);
             Vector2 translation = direction.normalized * ATTACK_MOVING_SPEED * Time.deltaTime;
-            ropeAttackInstance.transform.Translate(translation);
+            if (!isInflating) {
+                ropeAttackInstance.transform.Translate(translation);
+            }
         }
 
         attackTimer += Time.deltaTime;
-        if (attackTimer >= TIMER_ANIMATION_ATTACK) 
+        if (attackTimer >= TIMER_ANIMATION_ATTACK && !isInflating) 
         {
             isAttacking = false;
             DestroyRopeAttack();
@@ -321,8 +325,13 @@ public class PlayerController : MonoBehaviour
     {
        if (otherCollider.CompareTag("Enemy"))
         {
-            rope_attack.GetComponent<Rope>().RestartState();
-            Destroy(otherCollider.gameObject);
+            isInflating = true;
+            Enemy enemy = otherCollider.GetComponent<Enemy>();
+            enemy.SetPhase(Enemy.Phase.Inflated);
+            Rope ropeAttack = ropeAttackInstance.GetComponent<Rope>();
+            ropeAttack.SetIsInflating(true);
+            // rope_attack.GetComponent<Rope>().RestartState();
+            // Destroy(otherCollider.gameObject);
         }
     }
 

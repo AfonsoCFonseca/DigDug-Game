@@ -70,6 +70,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void SetPhase(Phase newPhase)
+    {
+        currentPhase = newPhase;
+    }
+
     private void Move()
     {
         currentTile = levelManager.GetCurrentTile(transform.position);

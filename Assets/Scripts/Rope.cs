@@ -14,6 +14,8 @@ public class Rope : MonoBehaviour
     public float durationToThirdRope = 0.2f;
     private float currentTime = 0f;
 
+    private bool isInflating = false;
+
     private void Start()
     {
         playerController = GetComponentInParent<PlayerController>();
@@ -22,11 +24,14 @@ public class Rope : MonoBehaviour
     private void Update()
     {
         currentTime += Time.deltaTime;
-        if(currentTime >= durationToSecondRope){
-            rope2.SetActive(true);
-        }
-        if(currentTime >= durationToThirdRope){
-            rope1.SetActive(true);
+        if (!isInflating)
+        {
+            if(currentTime >= durationToSecondRope){
+                rope2.SetActive(true);
+            }
+            if(currentTime >= durationToThirdRope){
+                rope1.SetActive(true);
+            }
         }
     }
 
@@ -39,5 +44,10 @@ public class Rope : MonoBehaviour
     {
         rope2.SetActive(false);
         rope1.SetActive(false);
+    }
+
+    public void SetIsInflating(bool newIsInflating)
+    {
+        isInflating = newIsInflating;
     }
 }

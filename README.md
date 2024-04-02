@@ -23,7 +23,9 @@ Additionally, a tile is composed of 8 slots (4 horizontal and 4 vertical), repre
 ### Enemy ###
 A general class is responsible for drawing the enemies and their animations. The class has three states: moving, ghost, and dying. In the moving state, it checks for available tiles, choosing between intersections, and follows the player if the tiles are connected. In Chase mode, it can move through filled tiles and moves towards the last tile where the player passed. The dying mode occurs when the player kills the enemy, triggering the animation of the dying frames and deleting the class at the end.
 
-<img width="400" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/sprite_remaster.gif'>
+<div align="center">
+  <img width="400" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/player_new_spritesheet.png'>
+</div>
 
 
 ---------------------------------------------------------------
@@ -65,6 +67,10 @@ I spent approximately four weekends developing the Enemy pathfinder from scratch
 Before moving, the Enemy checks every free neighboring tile around it and chooses one direction. From there, it checks the next possible free tile on that current neighboring tile and randomly selects one, setting a direction. This process continues until one of three things happens: it reaches a dead end, finds the player, or neither of the previous options occur.
 
 If a dead end is reached, the validation returns to the current enemy position and restarts the pathfinding process(I could have implemented a blacklist for the already investigated paths to improve the algorithm's performance, but I was already tired of this development). If the player is found, the pathfinding process immediately stops and returns the first position of the array that has the path to the player to become the next tile to move to. If neither of these options is met, it will randomly pick one of the available directions to move next.
+
+<div align="center">
+  <img width="400" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/sprite_remaster.gif'>
+</div>
 
 # Future Implementation
 

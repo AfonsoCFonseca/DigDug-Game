@@ -24,7 +24,7 @@ Additionally, a tile is composed of 8 slots (4 horizontal and 4 vertical), repre
 A general class is responsible for drawing the enemies and their animations. The class has three states: moving, ghost, and dying. In the moving state, it checks for available tiles, choosing between intersections, and follows the player if the tiles are connected. In Chase mode, it can move through filled tiles and moves towards the last tile where the player passed. The dying mode occurs when the player kills the enemy, triggering the animation of the dying frames and deleting the class at the end.
 
 <div align="center">
-  <img width="1000" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/player_new_spritesheet.png'>
+  <img width="967" height="160" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/player_new_spritesheet.png'>
 </div>
 
 

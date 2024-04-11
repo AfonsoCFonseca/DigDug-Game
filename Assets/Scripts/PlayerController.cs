@@ -28,10 +28,13 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     private float attackTimer = 0f;
     private float TIMER_ANIMATION_ATTACK = 0.3f;
+    private float TIMER_WHILE_INFLATING = 0.9f;
     private float ATTACK_MOVING_SPEED = 50f;
     private GameObject ropeAttackInstance = null;
+    private GameObject collidedEnemy = null;
 
     private bool isInflating = false;
+    private float inflatingTimer;
 
     void Start()
     {
@@ -43,6 +46,8 @@ public class PlayerController : MonoBehaviour
         gameValues = levelManager.GetComponent<GameValues>();
         utils = levelManager.GetComponent<Utils>();
         excavatorCollider = GetComponentInChildren<Excavator>();
+
+        inflatingTimer = TIMER_WHILE_INFLATING;
         
         SetPlayerToStartingPosition();
 
@@ -59,12 +64,14 @@ public class PlayerController : MonoBehaviour
 
         if (isAttacking)
         {
-            AttackTimerAndAnimation();
+            AttackHandler();
         }
     }
 
     void KeyMovement()
     {
+        if(isAttacking && !isInflating) return;
+
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || 
             Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)) 
         {
@@ -239,19 +246,19 @@ public class PlayerController : MonoBehaviour
     private void Attack()
     {
         if(isAttacking == true) return;
-        Vector2 ropeInitialPosition = new Vector3(transform.position.x + 7.5f, transform.position.y + -2.66f, 0);
+        Vector3 ropeInitialPosition = new Vector3(transform.position.x + 7.5f, transform.position.y + -2.66f, -0.01f);
         Quaternion quart = Quaternion.identity;
         switch(currentDirection) {
             case Direction.West:
-                ropeInitialPosition = new Vector3(transform.position.x - 2.80f, transform.position.y + -2.66f, 0);
+                ropeInitialPosition = new Vector3(transform.position.x - 2.80f, transform.position.y + -2.66f, -0.01f);
                 quart = Quaternion.Euler(0, 0, 180);
                 break;
             case Direction.North:
-                ropeInitialPosition = new Vector3(transform.position.x + 2.43f, transform.position.y + 2.53f, 0);
+                ropeInitialPosition = new Vector3(transform.position.x + 2.43f, transform.position.y + 2.53f, -0.01f);
                 quart = Quaternion.Euler(0, 0, 90);
                 break;
             case Direction.South:
-                ropeInitialPosition = new Vector3(transform.position.x + 2.99f, transform.position.y + -8.19f, 0);
+                ropeInitialPosition = new Vector3(transform.position.x + 2.99f, transform.position.y + -8.19f, -0.01f);
                 quart = Quaternion.Euler(0, 0, -90);
                 break;
         }
@@ -264,7 +271,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = true;
     }
 
-    private void AttackTimerAndAnimation()
+    private void AttackHandler()
     {
         if(ropeAttackInstance)
         {
@@ -283,10 +290,39 @@ public class PlayerController : MonoBehaviour
         attackTimer += Time.deltaTime;
         if (attackTimer >= TIMER_ANIMATION_ATTACK && !isInflating) 
         {
-            isAttacking = false;
             DestroyRopeAttack();
             attackTimer = 0f;
+            isAttacking = false;
         }
+
+        if(isMoving)
+        {
+            CancelAttack();
+        }
+
+        if(isInflating)
+        {
+            inflatingTimer -= Time.deltaTime;
+            if(inflatingTimer <= 0)
+            {
+                CancelAttack();
+            }
+        }
+    }
+
+    private void CancelAttack()
+    {
+        DestroyRopeAttack();
+        isAttacking = false;
+        isInflating = false;
+        attackTimer = 0f;
+        inflatingTimer = TIMER_WHILE_INFLATING;
+        if(collidedEnemy)
+        {
+            Enemy enemy = collidedEnemy.GetComponent<Enemy>();
+            enemy.SetPhase(Enemy.Phase.Moving);
+        }
+        collidedEnemy = null;
     }
 
     private void DestroyRopeAttack()
@@ -325,8 +361,9 @@ public class PlayerController : MonoBehaviour
     {
        if (otherCollider.CompareTag("Enemy"))
         {
+            collidedEnemy = otherCollider.gameObject;;
             isInflating = true;
-            Enemy enemy = otherCollider.GetComponent<Enemy>();
+            Enemy enemy = collidedEnemy.GetComponent<Enemy>();
             enemy.SetPhase(Enemy.Phase.Inflated);
             Rope ropeAttack = ropeAttackInstance.GetComponent<Rope>();
             ropeAttack.SetIsInflating(true);

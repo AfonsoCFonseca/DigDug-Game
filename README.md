@@ -89,6 +89,10 @@ If a dead end is reached, the validation returns to the current enemy position a
   <p>Side by side old/mine spritesheet comparison </p>
 </div>
 
+In between developments, I shifted focus to create some new sprite sheets for the player and enemy. I completed the sprite sheets but decided against applying them to the game because they didn't match the current art style. I've added them to the repository under /progress_photos and shared some previews in this readme file.
+
+After completing the AI enemy map exploration, I initiated the player attack sequence. This began with triggering the attack, moving the rope forward, and adding a trigger to its endpoint. Then, I established the collision between the enemy and the rope, implementing logic for the enemy's inflation state. To initiate enemy inflation, the player must press the attack button four times within a short timeframe. If this condition is not met, the enemy resets to its initial state and resumes wandering. This functionality was implemented using timers. Additionally, I incorporated an exception for when the player moves during inflation, cancelling the attack and preventing player movement while the rope is still in motion but has not yet reached its endpoint or encountered an enemy.
+
 # Future Implementation
 
 

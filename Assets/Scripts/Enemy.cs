@@ -10,6 +10,10 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Utils utils;
     private PlayerController playerController;
+    [SerializeField]
+    private Sprite[] inflatingSpriteArray;
+    [SerializeField]
+    private Sprite[] movingAndGhostSpriteArray;
 
     private LevelManager levelManager;
     private GameValues gameValues;
@@ -33,6 +37,11 @@ public class Enemy : MonoBehaviour
     Tile currentPossibleTile;
     Direction currentPossibleDirection;
 
+    private int health = 4;
+    private bool isCooldownHealth = false;
+    private float TIMER_COOLDOWN_HEALTH_VAL = 0.3f;
+    private float timerCooldownHealth;
+
     void Start()
     {
         pookasSprite = transform.Find("Sprite");
@@ -44,6 +53,8 @@ public class Enemy : MonoBehaviour
         gameValues = levelManager.GetComponent<GameValues>();
         utils = levelManager.GetComponent<Utils>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+
+        timerCooldownHealth = TIMER_COOLDOWN_HEALTH_VAL;
 
         currentTile = levelManager.GetCurrentTile(transform.position);
         List<Direction> possibleDirections = GetAllPossibleDirections(currentTile);
@@ -66,13 +77,29 @@ public class Enemy : MonoBehaviour
                 Move();
                 break;
             case Phase.Inflated:
+                animator.SetBool("isRunning", false);
                 break;
         }
+
+        HealthTimerWhileInflated();
     }
 
     public void SetPhase(Phase newPhase)
     {
         currentPhase = newPhase;
+    }
+
+    private void HealthTimerWhileInflated()
+    {
+        if(isCooldownHealth)
+        {
+            if(timerCooldownHealth <= 0)
+            {
+                isCooldownHealth = false;
+                timerCooldownHealth = TIMER_COOLDOWN_HEALTH_VAL;
+            }
+            timerCooldownHealth -= Time.deltaTime;
+        }
     }
 
     private void Move()
@@ -238,6 +265,22 @@ public class Enemy : MonoBehaviour
     private void Chase()
     {
         animator.SetBool("isChasing", true);
+    }
+
+    //returns if it's still alive
+    public bool Inflate()
+    {
+        currentPhase = Phase.Inflated;
+        if(!isCooldownHealth)
+        {
+            isCooldownHealth = true;
+            health--;
+            animator.enabled = false;
+            spriteRenderer.sprite = inflatingSpriteArray[health];
+            if(health <= 0) return true;
+            return false;
+        }
+        return false;
     }
 
     private bool isTilePlayerTile(Tile nt)

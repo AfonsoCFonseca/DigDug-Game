@@ -245,6 +245,11 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
+        if(isInflating == true)
+        {
+           InflictDamageToEnemy();
+           return;
+        }
         if(isAttacking == true) return;
         Vector3 ropeInitialPosition = new Vector3(transform.position.x + 7.5f, transform.position.y + -2.66f, -0.01f);
         Quaternion quart = Quaternion.identity;
@@ -269,6 +274,21 @@ public class PlayerController : MonoBehaviour
             ropeAttackInstance.transform.position.y, ropeAttackInstance.transform.position.z);
 
         isAttacking = true;
+    }
+
+    private void InflictDamageToEnemy()
+    {
+         // TIMER_WHILE_INFLATING
+        float timeDifference = TIMER_WHILE_INFLATING - inflatingTimer;
+        inflatingTimer += timeDifference;
+        Enemy enemy = collidedEnemy.GetComponent<Enemy>();
+        bool isEnemyAlive = enemy.Inflate();
+        if(isEnemyAlive)
+        {
+            rope_attack.GetComponent<Rope>().RestartState();
+            Destroy(collidedEnemy);
+            CancelAttack();
+        }
     }
 
     private void AttackHandler()

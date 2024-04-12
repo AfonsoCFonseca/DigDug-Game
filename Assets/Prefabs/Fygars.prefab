@@ -152,6 +152,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da878d9e2b7b4d7c8070bf2d24c05c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inflatingSpriteArray:
+  - {fileID: -455983290, guid: 0f010a2943e8145c6b958b21afc87855, type: 3}
+  - {fileID: 1310498471, guid: 0f010a2943e8145c6b958b21afc87855, type: 3}
+  - {fileID: -583397713, guid: 0f010a2943e8145c6b958b21afc87855, type: 3}
+  - {fileID: -205817913, guid: 0f010a2943e8145c6b958b21afc87855, type: 3}
+  movingAndGhostSpriteArray:
+  - {fileID: 1906072535, guid: 3007a236cedd646889ff0fc173065e5b, type: 3}
+  - {fileID: 1306449006, guid: 3007a236cedd646889ff0fc173065e5b, type: 3}
+  - {fileID: -208298569, guid: 3007a236cedd646889ff0fc173065e5b, type: 3}
   speed: 6
 --- !u!61 &145241851791635381
 BoxCollider2D:

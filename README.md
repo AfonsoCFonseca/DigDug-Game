@@ -19,6 +19,10 @@ The character moves along the X and Y axes by applying speed and Time.deltaTime 
   <img width="967" height="160" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/player_new_spritesheet1.png'>
 </div>
 
+<div align="center" style="font-size: smaller;">
+  <p>I've remastered the Player Spritesheet</p>
+</div>
+
 ### Tile/Slot ###
 A tile represents one-fourteenth of the X-axis and one-fourteenth of the Y-axis of the map, through which the player will move. The tile is determined by the integer mentioned in the desired map array for the tile's position. For example, the number 0 represents an undug tile, while numbers 1 or 2 represent a dug tile in the horizontal or vertical position.
 
@@ -31,6 +35,10 @@ A general class is responsible for drawing the enemies and their animations. The
 <div align="center">
   <img width="210" height="210" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/old_enemy_explode1.gif'>
   <img width="210" height="210" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/new_enemy_explode1.gif'>
+</div>
+
+<div align="center" style="font-size: smaller;">
+  <p>Also created a new spritesheet for the enemy inflation and explosion</p>
 </div>
 
 ---------------------------------------------------------------

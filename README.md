@@ -85,6 +85,10 @@ If a dead end is reached, the validation returns to the current enemy position a
   <img width="400" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/sprite_remaster.gif'>
 </div>
 
+<div align="center"">
+  <p>Side by side old/mine spritesheet comparison </p>
+</div>
+
 # Future Implementation
 
 

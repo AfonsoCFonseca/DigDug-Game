@@ -29,8 +29,8 @@ A general class is responsible for drawing the enemies and their animations. The
 
 
 <div align="center">
-  <img width="967" height="160" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/old_enemy_explode.gif'>
-  <img width="967" height="160" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/new_enemy_explode.gif'>
+  <img width="210" height="210" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/old_enemy_explode.gif'>
+  <img width="210" height="210" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/new_enemy_explode.gif'>
 </div>
 
 ---------------------------------------------------------------

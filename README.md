@@ -37,7 +37,7 @@ A general class is responsible for drawing the enemies and their animations. The
   <img width="210" height="210" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/new_enemy_explode1.gif'>
 </div>
 
-<div align="center" style="font-size: smaller;color: #808080;">
+<div align="center" style="font-size: 8px;color: #808080;">
   <p>also created a new spritesheet for the enemy inflation and explosion</p>
 </div>
 

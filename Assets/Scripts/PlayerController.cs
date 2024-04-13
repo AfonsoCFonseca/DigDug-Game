@@ -337,11 +337,6 @@ public class PlayerController : MonoBehaviour
         isInflating = false;
         attackTimer = 0f;
         inflatingTimer = TIMER_WHILE_INFLATING;
-        if(collidedEnemy)
-        {
-            Enemy enemy = collidedEnemy.GetComponent<Enemy>();
-            enemy.SetPhase(Enemy.Phase.Moving);
-        }
         collidedEnemy = null;
     }
 
@@ -387,8 +382,6 @@ public class PlayerController : MonoBehaviour
             enemy.SetPhase(Enemy.Phase.Inflated);
             Rope ropeAttack = ropeAttackInstance.GetComponent<Rope>();
             ropeAttack.SetIsInflating(true);
-            // rope_attack.GetComponent<Rope>().RestartState();
-            // Destroy(otherCollider.gameObject);
         }
     }
 

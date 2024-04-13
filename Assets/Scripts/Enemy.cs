@@ -37,9 +37,10 @@ public class Enemy : MonoBehaviour
     Tile currentPossibleTile;
     Direction currentPossibleDirection;
 
-    private int health = 4;
+    private int MAX_HEALTH = 4;
+    private int health;
     private bool isCooldownHealth = false;
-    private float TIMER_COOLDOWN_HEALTH_VAL = 0.3f;
+    private float TIMER_COOLDOWN_HEALTH_VAL = 0.4f;
     private float timerCooldownHealth;
 
     void Start()
@@ -55,6 +56,7 @@ public class Enemy : MonoBehaviour
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
 
         timerCooldownHealth = TIMER_COOLDOWN_HEALTH_VAL;
+        health = MAX_HEALTH;
 
         currentTile = levelManager.GetCurrentTile(transform.position);
         List<Direction> possibleDirections = GetAllPossibleDirections(currentTile);
@@ -78,10 +80,9 @@ public class Enemy : MonoBehaviour
                 break;
             case Phase.Inflated:
                 animator.SetBool("isRunning", false);
+                HealthTimerWhileInflated();
                 break;
         }
-
-        HealthTimerWhileInflated();
     }
 
     public void SetPhase(Phase newPhase)
@@ -91,15 +92,25 @@ public class Enemy : MonoBehaviour
 
     private void HealthTimerWhileInflated()
     {
-        if(isCooldownHealth)
+        if(timerCooldownHealth <= 0)
         {
-            if(timerCooldownHealth <= 0)
-            {
-                isCooldownHealth = false;
-                timerCooldownHealth = TIMER_COOLDOWN_HEALTH_VAL;
+            if(!isCooldownHealth) {
+                health++;
+                if(health >= MAX_HEALTH)
+                {
+                    animator.enabled = true;
+                    SetPhase(Phase.Moving);
+                }
+                else 
+                {
+                    Debug.Log(health);
+                    spriteRenderer.sprite = inflatingSpriteArray[health];
+                }
             }
-            timerCooldownHealth -= Time.deltaTime;
+            isCooldownHealth = false;
+            timerCooldownHealth = TIMER_COOLDOWN_HEALTH_VAL;
         }
+        timerCooldownHealth -= Time.deltaTime;
     }
 
     private void Move()
@@ -276,8 +287,9 @@ public class Enemy : MonoBehaviour
             isCooldownHealth = true;
             health--;
             animator.enabled = false;
+            Debug.Log(health);
             spriteRenderer.sprite = inflatingSpriteArray[health];
-            if(health <= 0) return true;
+            if(health < 0) return true;
             return false;
         }
         return false;

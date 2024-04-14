@@ -50,7 +50,7 @@ public class UI : MonoBehaviour
         life2ValueTransform = canvasTransform.Find("life_2");
     }
 
-    void AddScore(int scoreToAdd)
+    public void AddScore(int scoreToAdd)
     {   
         if(scoreTMP != null)
         {

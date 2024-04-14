@@ -282,11 +282,11 @@ public class PlayerController : MonoBehaviour
         float timeDifference = TIMER_WHILE_INFLATING - inflatingTimer;
         inflatingTimer += timeDifference;
         Enemy enemy = collidedEnemy.GetComponent<Enemy>();
-        bool isEnemyAlive = enemy.Inflate();
-        if(isEnemyAlive)
+        bool isEnemyDead = enemy.Inflate();
+        if(isEnemyDead)
         {
             rope_attack.GetComponent<Rope>().RestartState();
-            Destroy(collidedEnemy);
+            enemy.Die();
             CancelAttack();
         }
     }

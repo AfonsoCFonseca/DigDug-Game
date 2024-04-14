@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public class Enemy : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class Enemy : MonoBehaviour
 
     private LevelManager levelManager;
     private GameValues gameValues;
+    private UI ui;
+
+    [SerializeField]
+    private int enemyScore;
 
     public enum Phase
     {
@@ -53,6 +58,7 @@ public class Enemy : MonoBehaviour
         levelManager = gameManager.GetComponent<LevelManager>();
         gameValues = levelManager.GetComponent<GameValues>();
         utils = levelManager.GetComponent<Utils>();
+        ui = levelManager.GetComponent<UI>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
 
         timerCooldownHealth = TIMER_COOLDOWN_HEALTH_VAL;
@@ -95,7 +101,7 @@ public class Enemy : MonoBehaviour
         if(timerCooldownHealth <= 0)
         {
             if(!isCooldownHealth) {
-                health++;
+                UpdateHealth(true);
                 if(health >= MAX_HEALTH)
                 {
                     animator.enabled = true;
@@ -103,7 +109,6 @@ public class Enemy : MonoBehaviour
                 }
                 else 
                 {
-                    Debug.Log(health);
                     spriteRenderer.sprite = inflatingSpriteArray[health];
                 }
             }
@@ -111,6 +116,12 @@ public class Enemy : MonoBehaviour
             timerCooldownHealth = TIMER_COOLDOWN_HEALTH_VAL;
         }
         timerCooldownHealth -= Time.deltaTime;
+    }
+
+    private void UpdateHealth(bool isIncr)
+    {
+        int updatedHealth = isIncr ? ++health : --health;
+        health = Mathf.Clamp (updatedHealth, -1, MAX_HEALTH);
     }
 
     private void Move()
@@ -285,11 +296,10 @@ public class Enemy : MonoBehaviour
         if(!isCooldownHealth)
         {
             isCooldownHealth = true;
-            health--;
+            UpdateHealth(false);
+            if(health <= 0) return true;
             animator.enabled = false;
-            Debug.Log(health);
             spriteRenderer.sprite = inflatingSpriteArray[health];
-            if(health < 0) return true;
             return false;
         }
         return false;
@@ -299,5 +309,32 @@ public class Enemy : MonoBehaviour
     {
         return nt.getId() == playerController.getCurrentTile().getId() || 
             nt.getId() == playerController.getPreviousTile().getId();
+    }
+
+    public void Die()
+    {
+        BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider.enabled = false;
+
+        TextMeshPro score = this.GetComponent<TextMeshPro>();
+        score.text = enemyScore.ToString();
+        ui.AddScore(enemyScore);
+
+        isCooldownHealth = true;
+        spriteRenderer.sprite = inflatingSpriteArray[0];
+        Invoke("DestroyGameObject", 1.5f);
+        Invoke("HideRenderer", 0.5f);
+    }
+
+    private void DestroyGameObject()
+    {
+        Destroy(gameObject);
+    }
+
+    private void HideRenderer()
+    {
+        TextMeshPro score = this.GetComponent<TextMeshPro>();
+        score.enabled = true;
+        spriteRenderer.enabled = false;
     }
 }

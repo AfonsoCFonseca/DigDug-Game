@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     private bool isInflating = false;
     private float inflatingTimer;
 
+    private bool isDead = false;
+
     void Start()
     {
         playerSprite = transform.Find("Sprite");
@@ -405,9 +407,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D otherCollider)
     {
-        if(otherCollider.tag == "Enemy")
+        if(otherCollider.tag == "Enemy" && isDead == false)
         {
-            levelManager.RestartGame();
+            isDead = true; // handles the delay spam method calling
+            Invoke("RestartGame", 0.3f);
         }
+    }
+    //it's the only way to invoke another script method
+    private void RestartGame()
+    {
+        levelManager.RestartGame();
+        isDead = false;
     }
 }

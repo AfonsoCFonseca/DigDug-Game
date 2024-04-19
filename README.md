@@ -93,6 +93,9 @@ In between developments, I shifted focus to create some new sprite sheets for th
 
 After completing the AI enemy map exploration, I initiated the player attack sequence. This began with triggering the attack, moving the rope forward, and adding a trigger to its endpoint. Then, I established the collision between the enemy and the rope, implementing logic for the enemy's inflation state. To initiate enemy inflation, the player must press the attack button four times within a short timeframe. If this condition is not met, the enemy resets to its initial state and resumes wandering. This functionality was implemented using timers. Additionally, I incorporated an exception for when the player moves during inflation, cancelling the attack and preventing player movement while the rope is still in motion but has not yet reached its endpoint or encountered an enemy.
 
+Next, I implemented a Fire attack for the Fygar Enemy. Every 5 to 21 seconds, the enemy will spit fire. To achieve this, I had to create several timers to manage the activation, deactivation, and sprite switching during the fire attack phase. Additionally, I updated the enemy sprite to include a new fire animation phase and positioned the fire sprites according to the enemy's rotation.
+To complete the implementation, I added colliders to each sprite and set them to trigger upon player collision, resulting in a game restart (resulting in the loss of one life). Furthermore, I introduced a slight delay after the player is killed to allow the player to perceive the avatar's collision with the enemy
+
 # Future Implementation
 
 

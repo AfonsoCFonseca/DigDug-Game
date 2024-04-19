@@ -23,9 +23,9 @@ public class Enemy : MonoBehaviour
 
     private float fygarsTimer;
     private int MIN_FYGAR_TIMER = 5;
-    private int MAX_FYGAR_TIMER = 6; // this is 20
+    private int MAX_FYGAR_TIMER = 21; // this is 20
     private bool isShootingFire = false;
-    private float FYGAR_SHOOTING_FIRE_TIME = 2.0f;
+    private float FYGAR_SHOOTING_FIRE_TIME = 2.5f;
     private float fygarShootingFireTime;
     private float FYGAR_FIRE_PHASES_TIME = 0.6f;
     private float fygarFirePhaseTimer;
@@ -188,7 +188,7 @@ public class Enemy : MonoBehaviour
     private void ChangeFireState()
     {
         fygarFirePhase++;
-        if(fygarFirePhase - 1 <= fireGameObjectsArr.Length) {
+        if(fygarFirePhase - 1 <= fireGameObjectsArr.Length - 1) {
             if(fygarFirePhase - 2 >= 0) fireGameObjectsArr[fygarFirePhase - 2].SetActive(false);
             fireGameObjectsArr[fygarFirePhase - 1].SetActive(true);
         }
@@ -212,20 +212,13 @@ public class Enemy : MonoBehaviour
             case 0:
                 return dir == Direction.West ? -1.1f : 6.41f;
             case 1:
-                return dir == Direction.West ? -1.1f : 6.41f;
+                return dir == Direction.West ? -2.0f : 8.00f;
             case 2: 
-                return dir == Direction.West ? -1.1f : 6.41f;
+                return dir == Direction.West ? -2.95f : 9.30f;
             default: 
                 Debug.Log("Went to the default value at GetFirePositionX");
                 return dir == Direction.West ? -1.1f : 6.41f;
         }
-    }
-
-    private int GetFireIndexActive()
-    {
-        for (int i = 0; i < fireGameObjectsArr.Length; i++)
-            if (fireGameObjectsArr[i].activeSelf) return i;
-        return 0;
     }
 
     private void Move()
@@ -388,12 +381,12 @@ public class Enemy : MonoBehaviour
         pookasSprite.rotation = Quaternion.Euler(0f, yRotate, 0f);
         if(IsFygar())
         {
-            int fireIndexArrayActive = GetFireIndexActive();
-            // Vector3 firePos = dir == Direction.West ? new Vector3(-1.1f, -2.24f, 0) : new Vector3(6.41f, -2.24f, 0);
-
-            Vector3 firePos = new Vector3(GetFirePositionX(fireIndexArrayActive, dir), -2.24f, 0);
-            fireGameObjectsArr[fireIndexArrayActive].transform.rotation = Quaternion.Euler(0f, yRotate, 0f);
-            fireGameObjectsArr[fireIndexArrayActive].transform.localPosition = firePos;
+            for(int i = 0; i < fireGameObjectsArr.Length; i++)
+            {
+                Vector3 firePos = new Vector3(GetFirePositionX(i, dir), -2.92f, -0.1f);
+                fireGameObjectsArr[i].transform.rotation = Quaternion.Euler(0f, yRotate, 0f);
+                fireGameObjectsArr[i].transform.localPosition = firePos;
+            }
         }
     }
 

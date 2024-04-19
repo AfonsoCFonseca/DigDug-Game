@@ -43,4 +43,9 @@ public class Utils : MonoBehaviour
             }
         }
     }
+
+    public int GetRandomValueBetweenNumbers(int min, int max)
+    {
+        return Random.Range(min, max);
+    }  
 }

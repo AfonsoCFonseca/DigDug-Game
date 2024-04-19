@@ -13,12 +13,23 @@ public class Enemy : MonoBehaviour
     private PlayerController playerController;
     [SerializeField]
     private Sprite[] inflatingSpriteArray;
+    private GameObject[] fireGameObjectsArr;
     [SerializeField]
     private Sprite[] movingAndGhostSpriteArray;
 
     private LevelManager levelManager;
     private GameValues gameValues;
     private UI ui;
+
+    private float fygarsTimer;
+    private int MIN_FYGAR_TIMER = 5;
+    private int MAX_FYGAR_TIMER = 6; // this is 20
+    private bool isShootingFire = false;
+    private float FYGAR_SHOOTING_FIRE_TIME = 2.0f;
+    private float fygarShootingFireTime;
+    private float FYGAR_FIRE_PHASES_TIME = 0.6f;
+    private float fygarFirePhaseTimer;
+    private int fygarFirePhase = 0;
 
     [SerializeField]
     private int enemyScore;
@@ -72,6 +83,14 @@ public class Enemy : MonoBehaviour
 
         currentPossibleTile = currentTile;
         currentPossibleDirection = currentDirection;
+
+        if(IsFygar())
+        {
+            GetFireObjectAndPopulateArray();
+            fygarShootingFireTime = FYGAR_SHOOTING_FIRE_TIME;
+            fygarFirePhaseTimer = FYGAR_FIRE_PHASES_TIME;
+            fygarsTimer = (float) utils.GetRandomValueBetweenNumbers(MIN_FYGAR_TIMER, MAX_FYGAR_TIMER);
+        }
     }
 
     void Update()
@@ -82,7 +101,8 @@ public class Enemy : MonoBehaviour
                 Chase();
                 break;
             case Phase.Moving:
-                Move();
+                if(IsFygar()) FygarsFireException();
+                if(!isShootingFire) Move();
                 break;
             case Phase.Inflated:
                 animator.SetBool("isRunning", false);
@@ -122,6 +142,90 @@ public class Enemy : MonoBehaviour
     {
         int updatedHealth = isIncr ? ++health : --health;
         health = Mathf.Clamp (updatedHealth, -1, MAX_HEALTH);
+    }
+
+
+    private void GetFireObjectAndPopulateArray()
+    {
+        string[] childNames = { "FireSprite_1", "FireSprite_2", "FireSprite_3" };
+        fireGameObjectsArr = new GameObject[childNames.Length];
+        for (int i = 0; i < childNames.Length; i++)
+        {
+            Transform childTransform = transform.Find(childNames[i]);
+            if (childTransform != null)
+            {
+                fireGameObjectsArr[i] = childTransform.gameObject;
+            }
+        }
+    }
+
+    private void FygarsFireException()
+    {
+        fygarsTimer -= Time.deltaTime;
+        if(fygarsTimer <= 0)
+        {
+            StartsFire();
+
+            if(fygarFirePhaseTimer <= 0) 
+            {
+                ChangeFireState();
+            }
+            if(fygarShootingFireTime <= 0)
+            {
+                EndFire();
+            }
+        }
+    }
+
+    private void StartsFire()
+    {
+        isShootingFire = true;
+        fygarShootingFireTime -= Time.deltaTime;
+        fygarFirePhaseTimer -= Time.deltaTime;
+        animator.SetBool("isFiring", true);
+    }
+
+    private void ChangeFireState()
+    {
+        fygarFirePhase++;
+        if(fygarFirePhase - 1 <= fireGameObjectsArr.Length) {
+            if(fygarFirePhase - 2 >= 0) fireGameObjectsArr[fygarFirePhase - 2].SetActive(false);
+            fireGameObjectsArr[fygarFirePhase - 1].SetActive(true);
+        }
+        fygarFirePhaseTimer = FYGAR_FIRE_PHASES_TIME;
+    }
+
+    private void EndFire()
+    {
+        fygarFirePhase = 0;
+        animator.SetBool("isFiring", false);
+        fygarShootingFireTime = FYGAR_SHOOTING_FIRE_TIME;
+        fygarsTimer = (float) utils.GetRandomValueBetweenNumbers(MIN_FYGAR_TIMER, MAX_FYGAR_TIMER);
+        fireGameObjectsArr[2].SetActive(false);
+        isShootingFire = false;
+    }
+
+    private float GetFirePositionX(int index, Direction dir)
+    {
+        switch(index)
+        {
+            case 0:
+                return dir == Direction.West ? -1.1f : 6.41f;
+            case 1:
+                return dir == Direction.West ? -1.1f : 6.41f;
+            case 2: 
+                return dir == Direction.West ? -1.1f : 6.41f;
+            default: 
+                Debug.Log("Went to the default value at GetFirePositionX");
+                return dir == Direction.West ? -1.1f : 6.41f;
+        }
+    }
+
+    private int GetFireIndexActive()
+    {
+        for (int i = 0; i < fireGameObjectsArr.Length; i++)
+            if (fireGameObjectsArr[i].activeSelf) return i;
+        return 0;
     }
 
     private void Move()
@@ -282,6 +386,15 @@ public class Enemy : MonoBehaviour
     {
         float yRotate = dir == Direction.West ? 180f : 0;
         pookasSprite.rotation = Quaternion.Euler(0f, yRotate, 0f);
+        if(IsFygar())
+        {
+            int fireIndexArrayActive = GetFireIndexActive();
+            // Vector3 firePos = dir == Direction.West ? new Vector3(-1.1f, -2.24f, 0) : new Vector3(6.41f, -2.24f, 0);
+
+            Vector3 firePos = new Vector3(GetFirePositionX(fireIndexArrayActive, dir), -2.24f, 0);
+            fireGameObjectsArr[fireIndexArrayActive].transform.rotation = Quaternion.Euler(0f, yRotate, 0f);
+            fireGameObjectsArr[fireIndexArrayActive].transform.localPosition = firePos;
+        }
     }
 
     private void Chase()
@@ -336,5 +449,10 @@ public class Enemy : MonoBehaviour
         TextMeshPro score = this.GetComponent<TextMeshPro>();
         score.enabled = true;
         spriteRenderer.enabled = false;
+    }
+
+    private bool IsFygar()
+    {
+        return gameObject.name == "Fygars(Clone)";
     }
 }

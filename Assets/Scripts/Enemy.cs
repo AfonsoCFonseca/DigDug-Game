@@ -59,6 +59,11 @@ public class Enemy : MonoBehaviour
     private float TIMER_COOLDOWN_HEALTH_VAL = 0.4f;
     private float timerCooldownHealth;
 
+    private float chaseTimer;
+    private int TIME_CHASE_MAX = 10;
+    private int TIME_CHASE_MIN = 15;
+    private Tile playerTile;
+
     void Start()
     {
         pookasSprite = transform.Find("Sprite");
@@ -91,6 +96,8 @@ public class Enemy : MonoBehaviour
             fygarFirePhaseTimer = FYGAR_FIRE_PHASES_TIME;
             fygarsTimer = (float) utils.GetRandomValueBetweenNumbers(MIN_FYGAR_TIMER, MAX_FYGAR_TIMER);
         }
+
+        chaseTimer = (float) utils.GetRandomValueBetweenNumbers(TIME_CHASE_MIN, TIME_CHASE_MAX);
     }
 
     void Update()
@@ -101,6 +108,7 @@ public class Enemy : MonoBehaviour
                 Chase();
                 break;
             case Phase.Moving:
+                ChaseTimer();
                 if(IsFygar()) FygarsFireException();
                 if(!isShootingFire) Move();
                 break;
@@ -144,6 +152,37 @@ public class Enemy : MonoBehaviour
         health = Mathf.Clamp (updatedHealth, -1, MAX_HEALTH);
     }
 
+    private void Chase()
+    {
+        animator.SetBool("isChasing", true);
+        MoveTransistion(playerTile.transform.position);
+        float distanceToTarget = Vector2.Distance(transform.position, playerTile.transform.position);
+        if (distanceToTarget <= 0.1f)
+        {
+            ResetChase();
+            SetPhase(Phase.Moving);
+        }
+    }
+
+    private void ResetChase()
+    {
+        canGetNewNeighbour = true;
+        currentTile = levelManager.GetCurrentTile(playerTile.transform.position);
+        chaseTimer = utils.GetRandomValueBetweenNumbers(TIME_CHASE_MIN, TIME_CHASE_MAX);
+        idTilesSinceLastTurningpoint = new List<string>();
+        animator.SetBool("isChasing", false);
+    }
+
+    private void ChaseTimer()
+    {
+        if(isShootingFire) return;
+        chaseTimer -= Time.deltaTime;
+        if (chaseTimer <= 0)
+        {
+            playerTile = playerController.getCurrentTile();
+            SetPhase(Phase.Chase);
+        }
+    }
 
     private void GetFireObjectAndPopulateArray()
     {
@@ -243,7 +282,8 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        MoveTransistion(); //makes movement transition
+        Vector2 targetPosition = neighbourTile.transform.position;
+        MoveTransistion(targetPosition); //makes movement transition
 
         float distanceToNeighbour = Vector2.Distance(transform.position, neighbourTile.transform.position);
         //waits until it's close enough to get a new neighbour tile on the GetNewNeighbour() above
@@ -305,9 +345,8 @@ public class Enemy : MonoBehaviour
         return currentNewNeighbourTile;
     }
 
-    private void MoveTransistion()
+    private void MoveTransistion(Vector2 targetPosition)
     {
-        Vector2 targetPosition = neighbourTile.transform.position;
         Vector2 moveDirection = (targetPosition - (Vector2) transform.position).normalized;
         Vector2 newPosition = (Vector2)transform.position + moveDirection * speed * Time.deltaTime;
         transform.position = newPosition;
@@ -388,11 +427,6 @@ public class Enemy : MonoBehaviour
                 fireGameObjectsArr[i].transform.localPosition = firePos;
             }
         }
-    }
-
-    private void Chase()
-    {
-        animator.SetBool("isChasing", true);
     }
 
     //returns if it's still alive

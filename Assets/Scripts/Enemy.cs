@@ -45,6 +45,7 @@ public class Enemy : MonoBehaviour
     private Direction currentDirection = Direction.West;
     private Tile currentTile;
     private Tile neighbourTile;
+    private Vector3 initialPosition;
     private bool canGetNewNeighbour = true;
     [SerializeField] private float speed = 6.0f;
 
@@ -58,6 +59,7 @@ public class Enemy : MonoBehaviour
     private bool isCooldownHealth = false;
     private float TIMER_COOLDOWN_HEALTH_VAL = 0.4f;
     private float timerCooldownHealth;
+    private bool isDead = false;
 
     private float chaseTimer;
     private int TIME_CHASE_MAX = 10;
@@ -81,6 +83,7 @@ public class Enemy : MonoBehaviour
         health = MAX_HEALTH;
 
         currentTile = levelManager.GetCurrentTile(transform.position);
+        initialPosition = transform.position;
         List<Direction> possibleDirections = GetAllPossibleDirections(currentTile);
         int randomIndex = UnityEngine.Random.Range(0, possibleDirections.Count);
         currentDirection = possibleDirections[randomIndex];
@@ -122,6 +125,11 @@ public class Enemy : MonoBehaviour
     public void SetPhase(Phase newPhase)
     {
         currentPhase = newPhase;
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
     }
 
     private void HealthTimerWhileInflated()
@@ -167,7 +175,6 @@ public class Enemy : MonoBehaviour
     private void ResetChase()
     {
         canGetNewNeighbour = true;
-        currentTile = levelManager.GetCurrentTile(playerTile.transform.position);
         chaseTimer = utils.GetRandomValueBetweenNumbers(TIME_CHASE_MIN, TIME_CHASE_MAX);
         idTilesSinceLastTurningpoint = new List<string>();
         animator.SetBool("isChasing", false);
@@ -453,6 +460,7 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
+        isDead = true;
         BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
         boxCollider.enabled = false;
 
@@ -481,5 +489,17 @@ public class Enemy : MonoBehaviour
     private bool IsFygar()
     {
         return gameObject.name == "Fygars(Clone)";
+    }
+
+    public void Restart()
+    {
+        transform.position = initialPosition;
+        isShootingFire = false;
+        canGetNewNeighbour = true;
+        idTilesSinceLastTurningpoint = new List<string>();
+        animator.SetBool("isChasing", false);
+        fygarsTimer = (float) utils.GetRandomValueBetweenNumbers(MIN_FYGAR_TIMER, MAX_FYGAR_TIMER);
+        chaseTimer = (float) utils.GetRandomValueBetweenNumbers(TIME_CHASE_MIN, TIME_CHASE_MAX);
+        SetPhase(Phase.Moving);
     }
 }

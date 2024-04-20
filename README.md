@@ -98,6 +98,8 @@ To complete the implementation, I added colliders to each sprite and set them to
 
 A chase state for the enemy was implemented. This phase represents a 'ghost' phase where enemies can get close to the player by passing through walls and reaching the player's current position. This phase occurs randomly when the enemy is in a moving state. I have a simple timer that checks the player's current tile and transitions the enemy there, while switching to a different enemy sprite animation (ghost type). When the enemy reaches the player's location, it resets the variables for chasing and sets the enemy back to the moving phase.
 
+Map management and generation were the final steps to wrap up the game. I refactored the Restart method to avoid completely resetting the map, allowing the map path to remain intact when a life is lost. Then, I implemented the logic for progressing to the next level when the player defeats all the enemies on the map. However, to achieve this, I needed a unique map for each level. I decided to generate the map randomly with small increments in difficulty, where enemies become progressively faster. Additionally, for every even-numbered level, I added a new enemy to the game. The generation process itself was based on the number of enemies, with each enemy requiring a 1x3 hole to be created either horizontally or vertically (randomly). The positions of these holes were only created if they differed from the player's initial position and remained within the map dimensions. I achieved this by utilizing a do-while loop and applying these conditions within it. Once the map was successfully generated, I randomly placed an enemy in the middle of each 1x3 hole.
+
 # Future Implementation
 
 

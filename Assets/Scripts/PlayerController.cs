@@ -289,8 +289,28 @@ public class PlayerController : MonoBehaviour
         {
             rope_attack.GetComponent<Rope>().RestartState();
             enemy.Die();
+            if(isNextLevel())
+            {
+                levelManager.ChangeLevel();
+            }
             CancelAttack();
         }
+    }
+
+    private bool isNextLevel()
+    {
+        List<GameObject> allEnemiesInLevel = levelManager.GetAllEnemiesInLevel();
+        bool isNextLevel = true;
+        foreach(GameObject enemy in allEnemiesInLevel) {
+            if(enemy == null) continue;
+            Enemy enemyScript = enemy.GetComponent<Enemy>();
+            if(enemyScript.IsDead() == false)
+            {
+                isNextLevel = false;
+                break;
+            }
+        }
+        return isNextLevel;
     }
 
     private void AttackHandler()
@@ -416,7 +436,7 @@ public class PlayerController : MonoBehaviour
     //it's the only way to invoke another script method
     private void RestartGame()
     {
-        levelManager.RestartGame();
+        levelManager.RestartGame(false);
         isDead = false;
     }
 }

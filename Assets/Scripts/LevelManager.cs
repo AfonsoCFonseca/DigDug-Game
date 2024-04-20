@@ -10,12 +10,15 @@ public class LevelManager : MonoBehaviour
     public const float INITIAL_MAP_X = -35.0f;
     public const float INITIAL_MAP_Y = 30.35f;
 
+    private int level = 1;
+
     [SerializeField]
     public Tile tile;
 
     private Tile[,] mapArray;
     private List<GameObject> enemyGameObjects = new List<GameObject>();
     private LevelMaps levelMaps;
+    private int[][] currentLevelMap;
     private GameValues gameValues;
     private UI ui;
     [SerializeField] private PlayerController playerController;
@@ -31,12 +34,13 @@ public class LevelManager : MonoBehaviour
 
     void populateMap() {
         tileSpawn();
-        enemySpawn();
+        // enemySpawn();
     }
 
     void tileSpawn() 
     {
         mapArray = new Tile[HEIGHT_MAP_TILES, WIDTH_MAP_TILES];
+        currentLevelMap = levelMaps.GetMap();
         for (int i = 0; i < HEIGHT_MAP_TILES; i++)
         {
             for (int j = 0; j < WIDTH_MAP_TILES; j++)
@@ -50,17 +54,6 @@ public class LevelManager : MonoBehaviour
                 int[] tileSlotsState = readTileFromLevelMap(i, j);
 
                 mapArray[i, j].GetComponent<Tile>().Setup(tileSlotsState, i, j);
-
-                if(i == 1 && j == 11) {
-                    mapArray[i, j].GetSlot(3, true).SwitchToEndSlot(false);
-                }
-                if(i == 4 && j == 11) {
-                    mapArray[i, j].GetSlot(0, true).SwitchToEndSlot(true);
-                    mapArray[i, j].GetSlot(3, true).SwitchToEndSlot(false);
-                }
-                if(i == 6 && j == 11) {
-                    mapArray[i, j].GetSlot(0, true).SwitchToEndSlot(true);
-                }
             }
         }
     }
@@ -68,12 +61,13 @@ public class LevelManager : MonoBehaviour
     void enemySpawn()
     {
         enemyGameObjects = new List<GameObject>();
-        for(int i = 0; i < levelMaps.enemyPosition.Count; i++)
+        List<Position> enemiesPosition = levelMaps.GetEnemiesPosition();
+        for(int i = 0; i < enemiesPosition.Count; i++)
         {
-            Position pos = levelMaps.enemyPosition[i];
+            Position pos = enemiesPosition[i];
             Tile enemyTile = GetCurrentTileByArrayPosition(pos.x, pos.y);
             Vector2 currentPosition = new Vector2(enemyTile.transform.position.x, enemyTile.transform.position.y);
-            enemyGameObjects.Add(Instantiate(levelMaps.enemies[i], currentPosition, Quaternion.identity));
+            enemyGameObjects.Add(Instantiate(levelMaps.GetEnemies()[i], currentPosition, Quaternion.identity));
         }
     }
 
@@ -81,7 +75,7 @@ public class LevelManager : MonoBehaviour
     {
         int[] axisArrayState = new int[] { 0, 0, 0, 0 };
 
-        int slotState = levelMaps.map[y][x];
+        int slotState = currentLevelMap[y][x];
 
         if(slotState == 1 || slotState == 2 || slotState == 3) {
             axisArrayState = new int[] { slotState, slotState, slotState, slotState };
@@ -194,12 +188,28 @@ public class LevelManager : MonoBehaviour
         mapArray[mapY, mapX] = currentTile;
     }
 
-    public void RestartGame()
+    public void RestartGame(bool isGameOver)
     {
+        for (int i = 0; i < enemyGameObjects.Count; i++)
+        {
+            enemyGameObjects[i].GetComponent<Enemy>().Restart();
+        }
+        playerController.RestartPlayer();
+        ui.LooseLife();
+        // }
+    }
+
+    public List<GameObject> GetAllEnemiesInLevel()
+    {
+        return enemyGameObjects;
+    }
+
+    public void ChangeLevel()
+    {
+        level++;
         playerController.RestartPlayer();
         ClearMap();
         ClearEnemies();
-        ui.LooseLife();
         levelMaps.Restart();
         populateMap();
     }
@@ -223,5 +233,10 @@ public class LevelManager : MonoBehaviour
             Destroy(enemyGameObjects[i].gameObject);
             enemyGameObjects[i] = null;
         }
+    }
+
+    public int GetLevel()
+    {
+        return level;
     }
 }

@@ -96,6 +96,8 @@ After completing the AI enemy map exploration, I initiated the player attack seq
 Next, I implemented a Fire attack for the Fygar Enemy. Every 5 to 21 seconds, the enemy will spit fire. To achieve this, I had to create several timers to manage the activation, deactivation, and sprite switching during the fire attack phase. Additionally, I updated the enemy sprite to include a new fire animation phase and positioned the fire sprites according to the enemy's rotation.
 To complete the implementation, I added colliders to each sprite and set them to trigger upon player collision, resulting in a game restart (resulting in the loss of one life). Furthermore, I introduced a slight delay after the player is killed to allow the player to perceive the avatar's collision with the enemy
 
+A chase state for the enemy was implemented. This phase represents a 'ghost' phase where enemies can get close to the player by passing through walls and reaching the player's current position. This phase occurs randomly when the enemy is in a moving state. I have a simple timer that checks the player's current tile and transitions the enemy there, while switching to a different enemy sprite animation (ghost type). When the enemy reaches the player's location, it resets the variables for chasing and sets the enemy back to the moving phase.
+
 # Future Implementation
 
 

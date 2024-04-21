@@ -97,7 +97,7 @@ Next, I implemented a Fire attack for the Fygar Enemy. Every 5 to 21 seconds, th
 To complete the implementation, I added colliders to each sprite and set them to trigger upon player collision, resulting in a game restart (resulting in the loss of one life). Furthermore, I introduced a slight delay after the player is killed to allow the player to perceive the avatar's collision with the enemy
 
 <div align="center">
-  <img width="400" height="250" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_5_.gif'>
+  <img width="300" height="375" src='https://github.com/AfonsoCFonseca/DigDug-Game/blob/main/progress_photos/_6_.gif'>
 </div>
 
 A chase state for the enemy was implemented. This phase represents a 'ghost' phase where enemies can get close to the player by passing through walls and reaching the player's current position. This phase occurs randomly when the enemy is in a moving state. I have a simple timer that checks the player's current tile and transitions the enemy there, while switching to a different enemy sprite animation (ghost type). When the enemy reaches the player's location, it resets the variables for chasing and sets the enemy back to the moving phase.

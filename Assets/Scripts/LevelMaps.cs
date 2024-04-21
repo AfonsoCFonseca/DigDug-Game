@@ -149,7 +149,6 @@ public class LevelMaps : MonoBehaviour
         GameObject currentEnemy = isPookas ? pookas : fygars;
         Enemy enemyScript = currentEnemy.GetComponent<Enemy>();
         enemySpeed += INCREMENTAL_DIFFICULTY_SPEED;
-        // enemyScript.incrementSpeed(INCREMENTAL_DIFFICULTY_SPEED * level);
 
         enemies.Add(currentEnemy);
     }

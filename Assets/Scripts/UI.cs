@@ -44,7 +44,7 @@ public class UI : MonoBehaviour
         {
             roundTMP = roundValueTransform.GetComponent<TextMeshProUGUI>();
         }
-        NextRound();
+        NextRound(); 
 
         life1ValueTransform = canvasTransform.Find("life_1");
         life2ValueTransform = canvasTransform.Find("life_2");
@@ -76,6 +76,11 @@ public class UI : MonoBehaviour
         }
     }
 
+    public void NextRoundLevelUpdate(int level)
+    {
+        roundTMP.text = level.ToString();
+    }
+
     public void LooseLife()
     {
         currentLifes--;
@@ -92,18 +97,4 @@ public class UI : MonoBehaviour
             SceneManager.LoadScene(GAME_SCENE_NAME);
         }
     }
-
-    // public void ShowGameOver()
-    // {
-
-    // }
-
-    // public void RestartGame()
-    // {
-    //     currentLifes = 3;
-    //     score = 0;
-    //     scoreTMP.text = score.ToString();
-    //     life1ValueTransform.gameObject.SetActive(true);
-    //     life2ValueTransform.gameObject.SetActive(true);
-    // }
 }

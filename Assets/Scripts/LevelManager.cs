@@ -34,7 +34,7 @@ public class LevelManager : MonoBehaviour
 
     void populateMap() {
         tileSpawn();
-        // enemySpawn();
+        enemySpawn();
     }
 
     void tileSpawn() 
@@ -192,11 +192,13 @@ public class LevelManager : MonoBehaviour
     {
         for (int i = 0; i < enemyGameObjects.Count; i++)
         {
-            enemyGameObjects[i].GetComponent<Enemy>().Restart();
+            if(enemyGameObjects[i] != null)
+            {
+                enemyGameObjects[i].GetComponent<Enemy>().Restart();
+            }
         }
         playerController.RestartPlayer();
         ui.LooseLife();
-        // }
     }
 
     public List<GameObject> GetAllEnemiesInLevel()
@@ -207,6 +209,7 @@ public class LevelManager : MonoBehaviour
     public void ChangeLevel()
     {
         level++;
+        ui.NextRoundLevelUpdate(level);
         playerController.RestartPlayer();
         ClearMap();
         ClearEnemies();

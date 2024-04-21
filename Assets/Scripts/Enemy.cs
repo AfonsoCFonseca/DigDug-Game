@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Utils utils;
     private PlayerController playerController;
+    private LevelMaps levelMaps;
     [SerializeField]
     private Sprite[] inflatingSpriteArray;
     private GameObject[] fireGameObjectsArr;
@@ -47,7 +48,7 @@ public class Enemy : MonoBehaviour
     private Tile neighbourTile;
     private Vector3 initialPosition;
     private bool canGetNewNeighbour = true;
-    [SerializeField] private float speed = 6.0f;
+    private float currentSpeed;
 
     List<string> idTilesSinceLastTurningpoint = new List<string>();
 
@@ -76,6 +77,7 @@ public class Enemy : MonoBehaviour
         levelManager = gameManager.GetComponent<LevelManager>();
         gameValues = levelManager.GetComponent<GameValues>();
         utils = levelManager.GetComponent<Utils>();
+        levelMaps = levelManager.GetComponent<LevelMaps>();
         ui = levelManager.GetComponent<UI>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
 
@@ -101,6 +103,8 @@ public class Enemy : MonoBehaviour
         }
 
         chaseTimer = (float) utils.GetRandomValueBetweenNumbers(TIME_CHASE_MIN, TIME_CHASE_MAX);
+
+        currentSpeed = levelMaps.GetEnemySpeed();
     }
 
     void Update()
@@ -355,7 +359,7 @@ public class Enemy : MonoBehaviour
     private void MoveTransistion(Vector2 targetPosition)
     {
         Vector2 moveDirection = (targetPosition - (Vector2) transform.position).normalized;
-        Vector2 newPosition = (Vector2)transform.position + moveDirection * speed * Time.deltaTime;
+        Vector2 newPosition = (Vector2)transform.position + moveDirection * currentSpeed * Time.deltaTime;
         transform.position = newPosition;
     }
     
@@ -473,6 +477,11 @@ public class Enemy : MonoBehaviour
         Invoke("DestroyGameObject", 1.5f);
         Invoke("HideRenderer", 0.5f);
     }
+
+    // public void incrementSpeed(float valueToIncrement)
+    // {
+    //     currentSpeed += valueToIncrement;
+    // }
 
     private void DestroyGameObject()
     {

@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
     void KeyMovement()
     {
-        if(isAttacking && !isInflating) return;
+        if((isAttacking && !isInflating) || isDead) return;
 
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow) || 
             Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow)) 
@@ -291,10 +291,15 @@ public class PlayerController : MonoBehaviour
             enemy.Die();
             if(isNextLevel())
             {
-                levelManager.ChangeLevel();
+                Invoke("ChangeLevel", 1.0f);
             }
             CancelAttack();
         }
+    }
+
+    private void ChangeLevel()
+    {
+        levelManager.ChangeLevel();
     }
 
     private bool isNextLevel()
@@ -430,7 +435,7 @@ public class PlayerController : MonoBehaviour
         if(otherCollider.tag == "Enemy" && isDead == false)
         {
             isDead = true; // handles the delay spam method calling
-            Invoke("RestartGame", 0.3f);
+            Invoke("RestartGame", 0.4f);
         }
     }
     //it's the only way to invoke another script method

@@ -22,6 +22,9 @@ public class LevelMaps : MonoBehaviour
 
     private int currentNumOfEnemies = 3;
 
+    private float INCREMENTAL_DIFFICULTY_SPEED = 0.2f;
+    private float enemySpeed = 6.0f;
+
     void Start()
     {
         levelManager = GetComponent<LevelManager>();
@@ -50,14 +53,6 @@ public class LevelMaps : MonoBehaviour
             new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0},
             new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0}
         };
-        
-        enemyPosition.Add(new Position { x = 6, y = 2 });
-        enemyPosition.Add(new Position { x = 1, y = 2 });
-        enemyPosition.Add(new Position { x = 11, y = 2 });
-
-        enemies.Add(pookas);
-        enemies.Add(pookas);
-        enemies.Add(fygars);
     }
 
     public int[][] GetMap()
@@ -75,6 +70,11 @@ public class LevelMaps : MonoBehaviour
         return enemies;
     }
 
+    public float GetEnemySpeed()
+    {
+        return enemySpeed;
+    }
+
     public void Restart()
     {
         enemies.Clear();
@@ -87,7 +87,6 @@ public class LevelMaps : MonoBehaviour
         int level = levelManager.GetLevel();
         if(level % 2 == 0)
         {
-            Debug.Log("new enemy");
             currentNumOfEnemies++;
         }
 
@@ -131,9 +130,28 @@ public class LevelMaps : MonoBehaviour
             combinations.Add(comb1);
             combinations.Add(comb2);
             combinations.Add(comb3);
+
+            AddEnemiesToMap(isVertical ? x : x + 1, isVertical ? y + 1 : y, level);
         }
 
         return newMap;
+    }
+
+    private void AddEnemiesToMap(int x, int y, int level)
+    {
+        enemyPosition.Add(
+            new Position {x = x, y = y}
+        );
+
+        int rndNum = (int) (Random.Range(0,100));
+        bool isPookas = rndNum % 2 == 0;
+
+        GameObject currentEnemy = isPookas ? pookas : fygars;
+        Enemy enemyScript = currentEnemy.GetComponent<Enemy>();
+        enemySpeed += INCREMENTAL_DIFFICULTY_SPEED;
+        // enemyScript.incrementSpeed(INCREMENTAL_DIFFICULTY_SPEED * level);
+
+        enemies.Add(currentEnemy);
     }
 
     private int [][] GetCleanMap()

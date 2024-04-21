@@ -418,7 +418,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pookas: {fileID: 145241851791635383, guid: 0aa5c017bd4184e0cbbc5d97b36a5a05, type: 3}
   fygars: {fileID: 145241851791635383, guid: f6a1627af1d084611b5c1ec62f4243cf, type: 3}
+  stone: {fileID: 7871156707973139561, guid: c7449f39c32224c5695c585f81dbe230, type: 3}
   enemies: []
+  stones: []
 --- !u!114 &387821847
 MonoBehaviour:
   m_ObjectHideFlags: 0

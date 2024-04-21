@@ -15,9 +15,14 @@ public class LevelMaps : MonoBehaviour
     private GameObject pookas;
     [SerializeField]
     private GameObject fygars;
+    [SerializeField]
+    private GameObject stone;
 
     public List<Position> enemyPosition = new List<Position>();
     public List<GameObject> enemies = new List<GameObject>();
+    public List<Position> stonesPositions = new List<Position>();
+    public List<GameObject> stones = new List<GameObject>();
+
     public int[][] map;
 
     private int currentNumOfEnemies = 3;
@@ -68,6 +73,17 @@ public class LevelMaps : MonoBehaviour
     public List<GameObject> GetEnemies()
     {
         return enemies;
+    }
+
+
+    public List<Position> GetStonesPosition()
+    {
+        return stonesPositions;
+    }
+
+    public List<GameObject> GetStones()
+    {
+        return stones;
     }
 
     public float GetEnemySpeed()
@@ -134,6 +150,8 @@ public class LevelMaps : MonoBehaviour
             AddEnemiesToMap(isVertical ? x : x + 1, isVertical ? y + 1 : y, level);
         }
 
+        AddStonesToMap(combinations);
+
         return newMap;
     }
 
@@ -151,6 +169,34 @@ public class LevelMaps : MonoBehaviour
         enemySpeed += INCREMENTAL_DIFFICULTY_SPEED;
 
         enemies.Add(currentEnemy);
+    }
+
+    private void AddStonesToMap(List<string> combinationsEmpty)
+    {
+        bool shouldRepeat;
+        int randoPosX, randoPosY;
+
+        for(int i = 0; i < 4; i++)
+        {
+            do {
+                shouldRepeat = false;
+                randoPosX = Random.Range(0, levelManager.WIDTH_MAP_TILES - 1); // -1 to avoid touching the floor
+                randoPosY = Random.Range(0, levelManager.HEIGHT_MAP_TILES - 1);
+
+                string comb = randoPosY.ToString() + randoPosX.ToString();
+                string comb2 = (randoPosY + 1).ToString() + randoPosX.ToString(); // to check also if the pos bellow is empty
+
+                if(ValidateIfExistsInNewOnes(new string[] { comb, comb2 }, combinationsEmpty)) shouldRepeat = true;
+                if(ValidateException(randoPosY, randoPosX)) shouldRepeat = true;
+                if(ValidateException(randoPosY + 1, randoPosX)) shouldRepeat = true; // also to check if it isn't empty bellow
+            }
+            while(shouldRepeat == true);
+
+            stonesPositions.Add(
+                new Position {x = randoPosX, y = randoPosY}
+            );
+            stones.Add(stone);
+        }
     }
 
     private int [][] GetCleanMap()

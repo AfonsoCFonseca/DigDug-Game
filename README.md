@@ -105,7 +105,11 @@ A chase state for the enemy was implemented. This phase represents a 'ghost' pha
 Map management and generation were the final steps to wrap up the game. I refactored the Restart method to avoid completely resetting the map, allowing the map path to remain intact when a life is lost. Then, I implemented the logic for progressing to the next level when the player defeats all the enemies on the map. However, to achieve this, I needed a unique map for each level. I decided to generate the map randomly with small increments in difficulty, where enemies become progressively faster. Additionally, for every even-numbered level, I added a new enemy to the game. The generation process itself was based on the number of enemies, with each enemy requiring a 1x3 hole to be created either horizontally or vertically (randomly). The positions of these holes were only created if they differed from the player's initial position and remained within the map dimensions. I achieved this by utilizing a do-while loop and applying these conditions within it. Once the map was successfully generated, I randomly placed an enemy in the middle of each 1x3 hole.
 
 # Future Implementation
+This are the next steps I would suggest to implement
 
+- Add the pumping animation to the player
+- Make a decent enemy incremental addition in each level. Right now is 50% chance to be a Pookas or Fygar
+- Add the others colored maps from the original game once you get to level 5
+- Make the entrance sequence of the player when the game first starts
+- Make the animation when the player dies
 
----------------------------------------------------------------
-# Sketches & Evolution

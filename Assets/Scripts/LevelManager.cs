@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
 
     private Tile[,] mapArray;
     private List<GameObject> enemyGameObjects = new List<GameObject>();
+    private List<GameObject> listOfStones = new List<GameObject>();
     private LevelMaps levelMaps;
     private int[][] currentLevelMap;
     private GameValues gameValues;
@@ -35,6 +36,7 @@ public class LevelManager : MonoBehaviour
     void populateMap() {
         tileSpawn();
         enemySpawn();
+        stoneSpawner();
     }
 
     void tileSpawn() 
@@ -58,7 +60,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void enemySpawn()
+    private void enemySpawn()
     {
         enemyGameObjects = new List<GameObject>();
         List<Position> enemiesPosition = levelMaps.GetEnemiesPosition();
@@ -68,6 +70,19 @@ public class LevelManager : MonoBehaviour
             Tile enemyTile = GetCurrentTileByArrayPosition(pos.x, pos.y);
             Vector2 currentPosition = new Vector2(enemyTile.transform.position.x, enemyTile.transform.position.y);
             enemyGameObjects.Add(Instantiate(levelMaps.GetEnemies()[i], currentPosition, Quaternion.identity));
+        }
+    }
+
+    private void stoneSpawner()
+    {
+        listOfStones = new List<GameObject>();
+        List<Position> stonesPositions = levelMaps.GetStonesPosition();
+        for(int i = 0; i < stonesPositions.Count; i++)
+        {
+            Position pos = stonesPositions[i];
+            Tile stoneTile = GetCurrentTileByArrayPosition(pos.x, pos.y);
+            Vector2 currentPosition = new Vector2(stoneTile.transform.position.x, stoneTile.transform.position.y);
+            listOfStones.Add(Instantiate(levelMaps.GetStones()[i], currentPosition, Quaternion.identity));
         }
     }
 

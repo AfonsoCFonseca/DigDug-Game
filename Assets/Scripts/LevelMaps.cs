@@ -25,7 +25,7 @@ public class LevelMaps : MonoBehaviour
 
     public int[][] map;
 
-    private int currentNumOfEnemies = 3;
+    private int currentNumOfEnemies = 6;
 
     private float INCREMENTAL_DIFFICULTY_SPEED = 0.2f;
     private float enemySpeed = 6.0f;

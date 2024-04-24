@@ -131,7 +131,7 @@ public class LevelManager : MonoBehaviour
         int mapX = tCurrentTile.getMapTilePosition().mapX;
         int mapY = tCurrentTile.getMapTilePosition().mapY;
 
-        if (!isBoardLimit(mapX, mapY, direction)){
+        if (!isBoardLimit(mapX, mapY, direction) ){
             return null;
         }
 

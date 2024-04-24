@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 4487696086390088590}
   - component: {fileID: 1769806116519866501}
   - component: {fileID: 2102994710692570318}
+  - component: {fileID: 7714429504207071070}
   m_Layer: 0
   m_Name: Stone
   m_TagString: Untagged
@@ -131,7 +132,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 2.73, y: -2.59}
+  m_Offset: {x: 2.73, y: -3.14}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -142,7 +143,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.73, y: 4.07}
+  m_Size: {x: 3.2, y: 3.07}
   m_EdgeRadius: 0
 --- !u!114 &2102994710692570318
 MonoBehaviour:
@@ -156,3 +157,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257630246385547efa3c3911c693ea0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &7714429504207071070
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7871156707973139561}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

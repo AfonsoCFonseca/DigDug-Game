@@ -170,7 +170,6 @@ MonoBehaviour:
   - {fileID: -809292359, guid: a0026b02e41114575a7551b72a25edd7, type: 3}
   - {fileID: -205043912, guid: a0026b02e41114575a7551b72a25edd7, type: 3}
   enemyScore: 500
-  speed: 6
 --- !u!61 &145241851791635381
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -313,7 +312,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

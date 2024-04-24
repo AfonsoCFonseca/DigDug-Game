@@ -130,6 +130,8 @@ public class PlayerController : MonoBehaviour
     {
         // get the next tile
         Tile neighbourTile = levelManager.GetNeighbourTile(currentTile, requestedDirection);
+
+        if(neighbourTile.IsStone()) neighbourTile = null;
         //First input of the game
         if(currentNeighbourTile == null){
             SetPlayerStartingRotationAndDirection(requestedDirection, neighbourTile);

@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour
     // Slot[] verticalSlots = new Slot[4];
     List<Slot> verticalSlots = new List<Slot>();
     List<Slot> horizontalSlots = new List<Slot>();
+    private bool isStone = false;
 
     //Debugging tool
     private Transform debugFlag;
@@ -40,13 +41,7 @@ public class Tile : MonoBehaviour
         GameObject gameManager = GameObject.FindGameObjectsWithTag("GameManager")[0];
         levelManager = gameManager.GetComponent<LevelManager>();
     }
-
-    void Start()
-    {
-        // textMesh.text = id.Substring(0, 5);
-        // textMesh.transform.position = transform.position;
-    }
-
+    
     public void Setup(int[] slots, int mapY, int mapX)
     {
         tileArrayPosY = mapY;
@@ -166,6 +161,16 @@ public class Tile : MonoBehaviour
         if(!isFilled) return isFilled;
         isFilled = CheckSlots(verticalSlotsStates);
         return isFilled;
+    }
+
+    public bool IsStone()
+    {
+        return isStone;
+    }
+
+    public void SetIsStone(bool isCurrentStone)
+    { 
+        isStone = isCurrentStone;
     }
 
     public bool isEmptyInDirection(bool isVertical)

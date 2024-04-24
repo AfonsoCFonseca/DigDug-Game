@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour
 
     private float chaseTimer;
     private int TIME_CHASE_MAX = 10;
-    private int TIME_CHASE_MIN = 15;
+    private int TIME_CHASE_MIN = 30;
     private Tile playerTile;
 
     void Start()
@@ -166,6 +166,7 @@ public class Enemy : MonoBehaviour
 
     private void Chase()
     {
+        if(isDead) return;
         animator.SetBool("isChasing", true);
         MoveTransistion(playerTile.transform.position);
         float distanceToTarget = Vector2.Distance(transform.position, playerTile.transform.position);
@@ -273,6 +274,7 @@ public class Enemy : MonoBehaviour
 
     private void Move()
     {
+        if(isDead) return;
         currentTile = levelManager.GetCurrentTile(transform.position);
         animator.SetBool("isRunning", true);
 
@@ -477,11 +479,6 @@ public class Enemy : MonoBehaviour
         Invoke("DestroyGameObject", 1.5f);
         Invoke("HideRenderer", 0.5f);
     }
-
-    // public void incrementSpeed(float valueToIncrement)
-    // {
-    //     currentSpeed += valueToIncrement;
-    // }
 
     private void DestroyGameObject()
     {
